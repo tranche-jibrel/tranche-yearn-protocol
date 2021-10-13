@@ -12,7 +12,6 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./interfaces/IUniswapV2Pair.sol";
 import "./uniswap/UniswapV2Library.sol";
-import "./UniswapLiteBase.sol";
 import "./TransferETHHelper.sol";
 import "./JFeesCollectorStorage.sol";
 import "./interfaces/IJAdminTools.sol";

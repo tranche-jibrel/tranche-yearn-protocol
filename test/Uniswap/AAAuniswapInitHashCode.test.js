@@ -19,6 +19,7 @@ const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 //const UniswapV2FactoryBytecode = require('@uniswap/v2-core/build/UniswapV2Factory.json').bytecode
 
 const UniFactoryV2 = artifacts.require("UniFactoryV2");
+// const UniFactoryV2 = contract.fromArtifact("UniswapV2Factory");
 const IUniswapV2Factory = artifacts.require("IUniswapV2Factory");
 // const UniswapV2Pair = artifacts.require("UniswapV2Pair");
 // const UniswapV2Router02 = artifacts.require("UniswapV2Router02");

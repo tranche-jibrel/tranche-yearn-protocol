@@ -200,12 +200,12 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _trNum tranche number
      * @param _amount amount of token to be deposited in yaern token V3
      */
-    function yearnDepositV3(uint256 _trNum, uint256 _amount) internal {
+    function yearnDeposit(uint256 _trNum, uint256 _amount) internal {
         address origToken = trancheAddresses[_trNum].buyerCoinAddress;
         address yToken = trancheAddresses[_trNum].yTokenAddress;
         require(_amount <= IERC20Upgradeable(origToken).balanceOf(msg.sender), "Insufficient Balance");
 
-        IERC20Upgradeable(origToken).transferFrom(msg.sender, address(this), _amount);
+        // IERC20Upgradeable(origToken).transferFrom(msg.sender, address(this), _amount);
 
         IERC20Upgradeable(origToken).approve(yToken, _amount);
 
@@ -220,10 +220,10 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _trNum tranche number
      * @param _amount amount of token to be deposited in yaern token V3
      */
-    function yearnWithdrawV3(uint256 _trNum, uint256 _amount) internal returns (uint256 diffBal) {
+    function yearnWithdraw(uint256 _trNum, uint256 _amount) internal returns (uint256 diffBal) {
         address origToken = trancheAddresses[_trNum].buyerCoinAddress;
         address yToken = trancheAddresses[_trNum].yTokenAddress;
-        require(_amount < IYToken(yToken).balanceOf(msg.sender), "Insufficient Balance");
+        // require(_amount < IYToken(yToken).balanceOf(msg.sender), "Insufficient Balance");
         if (_amount > IYToken(yToken).balanceOf(address(this)))
             _amount = IYToken(yToken).balanceOf(address(this));
 
@@ -482,7 +482,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
         }
 
-        yearnDepositV3(_trancheNum, _amount);
+        yearnDeposit(_trancheNum, _amount);
         
         uint256 newYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
         setTrancheAExchangeRate(_trancheNum);
@@ -531,7 +531,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             normAmount = taTotAmount;
 
         address origToken = trancheAddresses[_trancheNum].buyerCoinAddress;
-        uint256 diffBal = yearnWithdrawV3(_trancheNum, normAmount);
+        uint256 diffBal = yearnWithdraw(_trancheNum, normAmount);
 
         uint256 userAmount = normAmount.mul(trancheParameters[_trancheNum].redemptionPercentage).div(PERCENT_DIVIDER);
         if (diffBal > 0) {
@@ -591,7 +591,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
         }
 
-        yearnDepositV3(_trancheNum, _amount);
+        yearnDeposit(_trancheNum, _amount);
 
         uint256 newYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
         if (newYTokenBalance > prevYTokenBalance) {
@@ -634,7 +634,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             normAmount = tbTotAmount;
 
         address origToken = trancheAddresses[_trancheNum].buyerCoinAddress;
-        uint256 diffBal = yearnWithdrawV3(_trancheNum, normAmount);
+        uint256 diffBal = yearnWithdraw(_trancheNum, normAmount);
 
         uint256 userAmount = normAmount.mul(trancheParameters[_trancheNum].redemptionPercentage).div(PERCENT_DIVIDER);
         if (diffBal > 0) {

@@ -18,7 +18,7 @@ contract JYearnStorage is OwnableUpgradeable {
 
     struct TrancheAddresses {
         address buyerCoinAddress;       // ETH (ETH_ADDR) or DAI or other supported tokens
-        address yTokenAddress;          // aETH or aDAI or other aToken
+        address yTokenAddress;          // yETH or yDAI or other yToken
         address ATrancheAddress;
         address BTrancheAddress;
     }
