@@ -75,11 +75,6 @@ Note: if ETH tranche is deployed, please deploy ETHGateway contract without a pr
     </thead>
     <tbody>
         <tr>
-            <td>ETHGateway</td>
-            <td><code>3.02</code></td>
-            <td>Ethereum gateway, useful when dealing with ethers</td>
-        </tr>
-        <tr>
             <td>JAdminTools</td>
             <td><code>2.27</code></td>
             <td>Contract for administrative roles control (implementation), allowing the identification of addresses when dealing with reserved methods.</td>
@@ -91,7 +86,7 @@ Note: if ETH tranche is deployed, please deploy ETHGateway contract without a pr
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>18.18</code></td>
+            <td><code>17.87</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens.</td>
         </tr>
         <tr>
@@ -138,6 +133,11 @@ Note: if ETH tranche is deployed, please deploy ETHGateway contract without a pr
             <td>JTranchesDeployerStorage</td>
             <td><code>0.14</code></td>
             <td>Tranche A & B token deployer (storage)</td>
+        </tr>
+        <tr>
+            <td>WETHGateway</td>
+            <td><code>2.43</code></td>
+            <td>Ethereum gateway, useful when dealing with ethers</td>
         </tr>
     </tbody>
   </table>

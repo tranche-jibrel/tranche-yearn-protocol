@@ -272,4 +272,41 @@ contract("USDC JYearn", function(accounts) {
     console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
+  describe('higher percentage for test coverage', function() {
+    it('calling unfrequently functions', async function () {
+      rewTok = await jYearnContract.rewardsToken()
+      console.log(rewTok)
+      await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
+      await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
+
+      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, yWETH_Address, rewTok, {from: tokenOwner})
+
+      await jYearnContract.setBlocksPerYear(2102400)
+
+      await jYearnContract.setDecimals(1, 18)
+
+      await jYearnContract.setTrancheRedemptionPercentage(1, 50)
+
+      await jYearnContract.setRedemptionTimeout(3)
+
+      await jYearnContract.setTrancheAFixedPercentage(1, web3.utils.toWei("0.03", "ether"))
+
+      await jYearnContract.getTrancheACurrentRPB(1)
+
+      await jYearnContract.setTrAStakingDetails(1, user1, 1, 0, 1634150567)
+      await jYearnContract.getSingleTrancheUserStakeCounterTrA(user1, 1)
+      await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrA(user1, 1, 1)
+
+      await jYearnContract.setTrBStakingDetails(1, user1, 1, 0, 1634150567)
+      await jYearnContract.getSingleTrancheUserStakeCounterTrB(user1, 1)
+      await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrB(user1, 1, 1)
+
+      await jYearnContract.getEthBalance()
+
+      await jYearnContract.transferTokenToFeesCollector(rewTok, 0)
+
+      await jYearnContract.withdrawEthToFeesCollector(0)
+
+    });
+
 });
