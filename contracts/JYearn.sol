@@ -20,6 +20,7 @@ import "./TokenInterface.sol";
 import "./interfaces/IWETHGateway.sol";
 import "./interfaces/IIncentivesController.sol";
 import "./interfaces/IYToken.sol";
+import "./interfaces/IYearnRewards.sol";
 
 
 contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage, IJYearn {
@@ -221,7 +222,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of token to be deposited in yaern token V3
      */
     function yearnWithdraw(uint256 _trNum, uint256 _amount) internal returns (uint256 diffBal) {
-        address origToken = trancheAddresses[_trNum].buyerCoinAddress;
+        address origToken = changeToWeth(trancheAddresses[_trNum].buyerCoinAddress);
         address yToken = trancheAddresses[_trNum].yTokenAddress;
         // require(_amount < IYToken(yToken).balanceOf(msg.sender), "Insufficient Balance");
         if (_amount > IYToken(yToken).balanceOf(address(this)))
@@ -699,39 +700,23 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         TransferETHHelper.safeTransferETH(feesCollectorAddress, _amount);
     }
     
-/*
     /**
-     * @dev get token rewards amount
+     * @dev get token rewards amount (only if some YFI token are inside contract)
      * @return amount of unclaimed tokens
      */
-/*    function getAaveUnclaimedRewards() public view returns(uint256) {
-        return IAaveIncentivesController(aaveIncentiveControllerAddress).getUserUnclaimedRewards(address(this));
+    function getYFIUnclaimedRewardShares() public view returns(uint256) {
+        return IYearnRewards(YFI_REWARDS_ADDRESS).claimable(address(this));
     }
 
     /**
-     * @dev claim token rewards from all assets in protocol and transfer them to fees collector
+     * @dev claim token rewards if YFI tokens are staked into this contract, exchanging YFI token for adai tokens
+     * @param _amount amount of YFI token to requested rewards on it
      */
-/*    function claimAaveRewards(/*address _rewardToken, uint256 _amount*//*) external {
-        address[] memory assets = new address[](tranchePairsCounter);
-        for (uint256 i = 0; i < tranchePairsCounter; i++) {
-            assets[i] = trancheAddresses[i].yTokenAddress;
-        }
+    function claimYearnRewards(uint256 _amount) external {
+        uint256 yfiBalance = IERC20Upgradeable(YFI_TOKEN_ADDRESS).balanceOf(address(this));
+        require(yfiBalance > 0, "JYearn: not enough YFI tokens to claim rewards");
 
-        uint256 claimableRewards = getAaveUnclaimedRewards();
-        if (claimableRewards > 0)
-            IAaveIncentivesController(aaveIncentiveControllerAddress).claimRewards(assets, claimableRewards, feesCollectorAddress);
+        IYearnRewards(YFI_REWARDS_ADDRESS).claim(_amount);
     }
 
-    /**
-     * @dev claim token rewards from a single assets (aToken) and transfer them to fees collector
-     * @param _assetToken asset token address (aToken)
-     * @param _amount amount of rewards token to claim 
-     */
-/*    function claimAaveRewardsSingleAsset(address _assetToken, uint256 _amount) external {
-        address[] memory assets = new address[](1);
-        assets[0] = _assetToken;
-        if (_amount > 0)
-            IAaveIncentivesController(aaveIncentiveControllerAddress).claimRewards(assets, _amount, feesCollectorAddress);
-    }
-*/
 }

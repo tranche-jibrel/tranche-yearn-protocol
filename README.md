@@ -37,8 +37,10 @@ truffle run coverage
 or to test a single file:
 
 ```bash
-truffle run coverage --network development --file="<filename>"    
+truffle run coverage --network development --file="<filename>"   
 ```
+
+Test coverage on JYearn contract: 91.02%
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
@@ -86,12 +88,12 @@ Note: if ETH tranche is deployed, please deploy ETHGateway contract without a pr
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>17.87</code></td>
+            <td><code>18.64</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens.</td>
         </tr>
         <tr>
             <td>JYearnStorage</td>
-            <td><code>1.86</code></td>
+            <td><code>2.02</code></td>
             <td>Core contract protocol (storage)</td>
         </tr>
         <tr>

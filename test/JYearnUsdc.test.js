@@ -275,7 +275,6 @@ contract("USDC JYearn", function(accounts) {
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
       rewTok = await jYearnContract.rewardsToken()
-      console.log(rewTok)
       await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
       await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
 
@@ -307,6 +306,11 @@ contract("USDC JYearn", function(accounts) {
 
       await jYearnContract.withdrawEthToFeesCollector(0)
 
+      await jYearnContract.getYFIUnclaimedRewardShares()
+      await expectRevert(jYearnContract.claimYearnRewards(10), "JYearn: not enough YFI tokens to claim rewards")
+
     });
+
+  })
 
 });
