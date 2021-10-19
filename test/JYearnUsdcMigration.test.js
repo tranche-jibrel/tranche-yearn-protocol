@@ -214,6 +214,18 @@ contract("USDC JYearn", function(accounts) {
     console.log("New Actual Block: " + block.number);
   });
 
+  it('migration from one vault to a token, back an forth', async function () {
+    await jYearnContract.migrateYTranche(2, yUSDC_Address, false)
+    console.log("JYearn total Value in new token: " + fromWei(await jYearnContract.getTotalValue(2)));
+    console.log("JYearn TrA Value in new token: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
+    console.log("JYearn TrB Value in new token: " + fromWei(await jYearnContract.getTrBValue(2)));
+
+    await jYearnContract.migrateYTranche(2, yvUSDC_Address, true)
+    console.log("JYearn total Value in old vault: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
+    console.log("JYearn TrA Value in old vault: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
+    console.log("JYearn TrB Value in old vault: " + fromWei6Dec(await jYearnContract.getTrBValue(2)));
+  });
+
   it("user1 redeems token usdcTrA", async function () {
     oldBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
     console.log("User1 Usdc balance: "+ oldBal + " USDC");

@@ -13,3 +13,4 @@ coverageEnv
 docs/
 artifacts/
 cache/
+oldTests/

@@ -13,6 +13,7 @@ contract JYearnStorage is OwnableUpgradeable {
     //address public constant WETH_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // mainnet
     //address public constant WETH_ADDRESS = 0xd0A1E359811322d97991E03f863a0C30C2cF029C; // kovan
     address public constant ETH_ADDR = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+    address public constant WETH_ADDR = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
     address public constant YFI_TOKEN_ADDRESS = 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e;
     address public constant YFI_REWARDS_ADDRESS = 0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862;
@@ -25,6 +26,7 @@ contract JYearnStorage is OwnableUpgradeable {
         address yTokenAddress;          // yETH or yDAI or other yToken
         address ATrancheAddress;
         address BTrancheAddress;
+        bool isVault;                   // is yToken a vault or not
     }
 
     struct TrancheParameters {

@@ -1,5 +1,3 @@
-<!-- Add banner here -->
-
 # Yearn Tranche Protocol
 
 <img src="https://gblobscdn.gitbook.com/spaces%2F-MP969WsfbfQJJFgxp2K%2Favatar-1617981494187.png?alt=media" alt="Tranche Logo" width="100">
@@ -40,15 +38,11 @@ or to test a single file:
 truffle run coverage --network development --file="<filename>"   
 ```
 
-Test coverage on JYearn contract: 91.02%
+Test coverage on JYearn contract: 92.39%
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
 ## Tranche Yearn Protocol Usage
-
-### To be implemented
-
-Following is a description on how to use tests on project.
 
 a) deploy JYearn contract and initialize it 
 
@@ -62,6 +56,18 @@ d) remember to enable every tranche deposit with setTrancheDeposit(uint256 _tran
 Users can now call buy and redeem functions for tranche A & B tokens
 
 Note: if ETH tranche is deployed, please deploy ETHGateway contract without a proxy, then set its address in JCompound with setETHGateway function.
+
+[(Back to top)](#Yearn-Tranche-Protocol)
+
+## Tranche Migration to new Yearn version
+
+You can migrate to a different Yearn version vault or token simply calling the following function:
+
+```bash
+migrateYTranche(uint256 _trancheNum, address _newYTokenAddress, bool _isVault)
+```
+
+All values will be sent to new vault and tokens inside contract will be switched with the new one, no other change
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
@@ -88,12 +94,12 @@ Note: if ETH tranche is deployed, please deploy ETHGateway contract without a pr
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>18.64</code></td>
+            <td><code>20.44</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens.</td>
         </tr>
         <tr>
             <td>JYearnStorage</td>
-            <td><code>2.02</code></td>
+            <td><code>2.07</code></td>
             <td>Core contract protocol (storage)</td>
         </tr>
         <tr>

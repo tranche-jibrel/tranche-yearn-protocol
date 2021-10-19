@@ -57,7 +57,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @dev admins modifiers
      */
     modifier onlyAdmins() {
-        require(IJAdminTools(adminToolsAddress).isAdmin(msg.sender), "JAave: not an Admin");
+        require(IJAdminTools(adminToolsAddress).isAdmin(msg.sender), "JYearn: not an Admin");
         _;
     }
 
@@ -76,7 +76,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             // address _aaveIncentiveController,
             address _wethAddress,
             address _rewardsToken) external onlyOwner{
-        require((_adminTools != address(0)) && (_feesCollector != address(0)) && (_tranchesDepl != address(0)), "JAave: check addresses");
+        require((_adminTools != address(0)) && (_feesCollector != address(0)) && (_tranchesDepl != address(0)), "JYearn: check addresses");
         adminToolsAddress = _adminTools;
         feesCollectorAddress = _feesCollector;
         tranchesDeployerAddress = _tranchesDepl;
@@ -98,7 +98,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _newValue new value
      */
     function setBlocksPerYear(uint256 _newValue) external onlyAdmins {
-        require(_newValue > 0, "JAave: new value not allowed");
+        require(_newValue > 0, "JYearn: new value not allowed");
         totalBlocksPerYear = _newValue;
     }
 
@@ -123,7 +123,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _underlyingDec underlying token decimals
      */
     function setDecimals(uint256 _trancheNum, uint8 _underlyingDec) external onlyAdmins {
-        require(_underlyingDec <= 18, "JAave: too many decimals");
+        require(_underlyingDec <= 18, "JYearn: too many decimals");
         trancheParameters[_trancheNum].underlyingDecimals = _underlyingDec;
     }
 
@@ -145,6 +145,37 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     }
 
     /**
+     * @dev set redemption timeout
+     * @param _trancheNum tranche number
+     * @param _yTokenAddress yToken or yVault address
+     * @param _isVault vault or token
+     */
+    function setNewYToken(uint256 _trancheNum, address _yTokenAddress, bool _isVault) external onlyAdmins {
+        require(_trancheNum < tranchePairsCounter, "JYearn: tranche number too high");
+        require(_yTokenAddress != address(0), "JYearn: yToken address not allowed");
+        trancheAddresses[_trancheNum].yTokenAddress = _yTokenAddress;
+        trancheAddresses[_trancheNum].isVault = _isVault;
+    }
+
+    /**
+     * @dev set redemption timeout
+     * @param _trancheNum tranche number
+     * @param _newYTokenAddress yToken or yVault address
+     * @param _isVault vault or token
+     */
+    function migrateYTranche(uint256 _trancheNum, address _newYTokenAddress, bool _isVault) external onlyAdmins {
+        require(_trancheNum < tranchePairsCounter, "JYearn: tranche number too high");
+        require(_newYTokenAddress != address(0), "JYearn: yToken address not allowed");
+        uint256 totProtSupply = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
+        yearnWithdraw(_trancheNum, totProtSupply);
+        trancheAddresses[_trancheNum].yTokenAddress = _newYTokenAddress;
+        trancheAddresses[_trancheNum].isVault = _isVault;
+        uint256 totUnderBalance = getTokenBalance(trancheAddresses[_trancheNum].buyerCoinAddress);
+        IERC20Upgradeable(trancheAddresses[_trancheNum].buyerCoinAddress).approve(_newYTokenAddress, totUnderBalance);
+        IYToken(_newYTokenAddress).deposit(totUnderBalance);
+    }
+
+    /**
      * @dev set tranche redemption percentage scaled by 1e18
      * @param _trancheNum tranche number
      * @param _newTrAPercentage new tranche A RPB
@@ -156,17 +187,19 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
 
     function addTrancheToProtocol(address _buyerCoinAddress, 
             address _yTokenAddress, 
+            bool _isVault,
             string memory _nameA, 
             string memory _symbolA, 
             string memory _nameB, 
             string memory _symbolB, 
             uint256 _fixedRpb, 
             uint8 _underlyingDec) external onlyAdmins nonReentrant {
-        require(tranchesDeployerAddress != address(0), "JAave: set tranche eth deployer");
-        // require(lendingPoolAddressProvider != address(0), "JAave: set lending pool address provider");
+        require(tranchesDeployerAddress != address(0), "JYearn: set tranche eth deployer");
+        // require(lendingPoolAddressProvider != address(0), "JYearn: set lending pool address provider");
 
         trancheAddresses[tranchePairsCounter].buyerCoinAddress = _buyerCoinAddress;
         trancheAddresses[tranchePairsCounter].yTokenAddress = _yTokenAddress;
+        trancheAddresses[tranchePairsCounter].isVault = _isVault;
         trancheAddresses[tranchePairsCounter].ATrancheAddress = 
                 IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, msg.sender, rewardsToken);
         trancheAddresses[tranchePairsCounter].BTrancheAddress = 
@@ -176,6 +209,18 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         trancheParameters[tranchePairsCounter].trancheAFixedPercentage = _fixedRpb;
         trancheParameters[tranchePairsCounter].trancheALastActionBlock = block.number;
         // if we would like to have always 18 decimals
+        /*uint256 tempPrice;
+        if (!_isVault) {
+            tempPrice = IYToken(_yTokenAddress).getPricePerFullShare();
+        } else {
+            tempPrice = IYToken(_yTokenAddress).pricePerShare();
+        }
+        if (_underlyingDec < 18) {
+            uint256 diffDecs = uint256(18).sub(_underlyingDec);
+            tempPrice = tempPrice.mul(10 ** diffDecs);
+        }*/
+
+        // trancheParameters[tranchePairsCounter].storedTrancheAPrice = tempPrice;
         trancheParameters[tranchePairsCounter].storedTrancheAPrice = uint256(1e18);
 
         trancheParameters[tranchePairsCounter].redemptionPercentage = 9950;  //default value 99.5%
@@ -206,14 +251,9 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         address yToken = trancheAddresses[_trNum].yTokenAddress;
         require(_amount <= IERC20Upgradeable(origToken).balanceOf(msg.sender), "Insufficient Balance");
 
-        // IERC20Upgradeable(origToken).transferFrom(msg.sender, address(this), _amount);
-
         IERC20Upgradeable(origToken).approve(yToken, _amount);
 
         IYToken(yToken).deposit(_amount);
-
-        // if (endBal > startBal)
-        //     SafeERC20Upgradeable.safeTransfer(IERC20Upgradeable(yToken), msg.sender, endBal.sub(startBal));
     }
 
     /**
@@ -224,7 +264,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     function yearnWithdraw(uint256 _trNum, uint256 _amount) internal returns (uint256 diffBal) {
         address origToken = changeToWeth(trancheAddresses[_trNum].buyerCoinAddress);
         address yToken = trancheAddresses[_trNum].yTokenAddress;
-        // require(_amount < IYToken(yToken).balanceOf(msg.sender), "Insufficient Balance");
+
         if (_amount > IYToken(yToken).balanceOf(address(this)))
             _amount = IYToken(yToken).balanceOf(address(this));
 
@@ -232,9 +272,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         IYToken(yToken).withdraw(_amount);
         uint256 endBal = IERC20Upgradeable(origToken).balanceOf(address(this));
         return diffBal = endBal.sub(startBal);
-
-        // if (endBal > startBal && _receiver != address(this))
-        //     SafeERC20Upgradeable.safeTransfer(IERC20Upgradeable(origToken), _receiver, endBal.sub(startBal));
     }
     
     /**
@@ -282,6 +319,36 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     }
 
     /**
+     * @dev get price for yTokens
+     * @param _trancheNum tranche number
+     * @return yToken price
+     */
+    function getYTokenNormPrice(uint256 _trancheNum) public view returns (uint256){
+        uint256 tmpPrice = IYToken(trancheAddresses[_trancheNum].yTokenAddress).getPricePerFullShare();
+        uint256 underDecs = trancheParameters[_trancheNum].underlyingDecimals;
+        if (underDecs < 18) {
+            uint256 diffDecs = uint256(18).sub(underDecs);
+            tmpPrice = tmpPrice.mul(10 ** diffDecs);
+        }
+        return tmpPrice;
+    }
+
+    /**
+     * @dev get price for yVaults
+     * @param _trancheNum tranche number
+     * @return yVault price
+     */
+    function getYVaultNormPrice(uint256 _trancheNum) public view returns (uint256){
+       uint256 tmpPrice = IYToken(trancheAddresses[_trancheNum].yTokenAddress).pricePerShare();
+       uint256 underDecs = trancheParameters[_trancheNum].underlyingDecimals;
+        if (underDecs < 18) {
+            uint256 diffDecs = uint256(18).sub(underDecs);
+            tmpPrice = tmpPrice.mul(10 ** diffDecs);
+        }
+        return tmpPrice;
+    }
+
+    /**
      * @dev get Tranche A value in underlying tokens
      * @param _trancheNum tranche number
      * @return trANormValue tranche A value in underlying tokens
@@ -316,7 +383,15 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @return tranche total value in underlying tokens
      */
     function getTotalValue(uint256 _trancheNum) public view returns (uint256) {
-        return getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
+        uint256 yPrice;
+        if (trancheAddresses[_trancheNum].isVault)
+            yPrice = getYVaultNormPrice(_trancheNum);
+        else
+            yPrice = getYTokenNormPrice(_trancheNum);
+
+        uint256 totProtSupply = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
+
+        return totProtSupply.mul(yPrice).div(1e18);
     }
 
     /**
@@ -469,17 +544,17 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of stable coins sent by buyer
      */
     function buyTrancheAToken(uint256 _trancheNum, uint256 _amount) external payable nonReentrant {
-        require(trancheDepositEnabled[_trancheNum], "JAave: tranche deposit disabled");
+        require(trancheDepositEnabled[_trancheNum], "JYearn: tranche deposit disabled");
         uint256 prevYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
         // address lendingPool = ILendingPoolAddressesProvider(lendingPoolAddressProvider).getLendingPool();
         address _tokenAddr = trancheAddresses[_trancheNum].buyerCoinAddress;
         if (_tokenAddr == ETH_ADDR) {
-            require(msg.value == _amount, "JAave: msg.value not equal to amount");
+            require(msg.value == _amount, "JYearn: msg.value not equal to amount");
             IWETHGateway(wethGatewayAddress).depositETH{value: msg.value}();
             _tokenAddr = wrappedEthAddress;
         } else {
             // check approve
-            require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JAave: allowance failed buying tranche A");
+            require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche A");
             SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
         }
 
@@ -514,9 +589,9 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of stable coins sent by buyer
      */
     function redeemTrancheAToken(uint256 _trancheNum, uint256 _amount) external nonReentrant {
-        require((block.number).sub(lastActivity[msg.sender]) >= redeemTimeout, "JAave: redeem timeout not expired on tranche A");
+        require((block.number).sub(lastActivity[msg.sender]) >= redeemTimeout, "JYearn: redeem timeout not expired on tranche A");
         // check approve
-        require(IERC20Upgradeable(trancheAddresses[_trancheNum].ATrancheAddress).allowance(msg.sender, address(this)) >= _amount, "JAave: allowance failed redeeming tranche A");
+        require(IERC20Upgradeable(trancheAddresses[_trancheNum].ATrancheAddress).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed redeeming tranche A");
         //Transfer DAI from msg.sender to protocol;
         SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(trancheAddresses[_trancheNum].ATrancheAddress), msg.sender, address(this), _amount);
 
@@ -571,7 +646,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of stable coins sent by buyer
      */
     function buyTrancheBToken(uint256 _trancheNum, uint256 _amount) external payable nonReentrant {
-        require(trancheDepositEnabled[_trancheNum], "JAave: tranche deposit disabled");
+        require(trancheDepositEnabled[_trancheNum], "JYearn: tranche deposit disabled");
         // refresh value for tranche A
         setTrancheAExchangeRate(_trancheNum);
         // get tranche B exchange rate
@@ -583,12 +658,12 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         // address lendingPool = ILendingPoolAddressesProvider(lendingPoolAddressProvider).getLendingPool();
         address _tokenAddr = trancheAddresses[_trancheNum].buyerCoinAddress;
         if (_tokenAddr == ETH_ADDR) {
-            require(msg.value == _amount, "JAave: msg.value not equal to amount");
+            require(msg.value == _amount, "JYearn: msg.value not equal to amount");
             IWETHGateway(wethGatewayAddress).depositETH{value: msg.value}();
             _tokenAddr = wrappedEthAddress;
         } else {
             // check approve
-            require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JAave: allowance failed buying tranche B");
+            require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche B");
             SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
         }
 
@@ -617,9 +692,9 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of stable coins sent by buyer
      */
     function redeemTrancheBToken(uint256 _trancheNum, uint256 _amount) external nonReentrant {
-        require((block.number).sub(lastActivity[msg.sender]) >= redeemTimeout, "JAave: redeem timeout not expired on tranche B");
+        require((block.number).sub(lastActivity[msg.sender]) >= redeemTimeout, "JYearn: redeem timeout not expired on tranche B");
         // check approve
-        require(IERC20Upgradeable(trancheAddresses[_trancheNum].BTrancheAddress).allowance(msg.sender, address(this)) >= _amount, "JAave: allowance failed redeeming tranche B");
+        require(IERC20Upgradeable(trancheAddresses[_trancheNum].BTrancheAddress).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed redeeming tranche B");
         //Transfer DAI from msg.sender to protocol;
         SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(trancheAddresses[_trancheNum].BTrancheAddress), msg.sender, address(this), _amount);
 

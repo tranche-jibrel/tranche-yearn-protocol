@@ -20,12 +20,12 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
         OwnableUpgradeable.__Ownable_init();
     }
 
-    function setJAaveAddress(address _jAave) external onlyOwner {
-        jAaveAddress = _jAave;
+    function setJYearnAddress(address _jYearn) external onlyOwner {
+        jYearnAddress = _jYearn;
     }
 
     modifier onlyProtocol() {
-        require(msg.sender == jAaveAddress, "TrancheDeployer: caller is not JAave");
+        require(msg.sender == jYearnAddress, "TrancheDeployer: caller is not JYearn");
         _;
     }
 

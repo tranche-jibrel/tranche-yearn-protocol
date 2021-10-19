@@ -6,4 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 interface IYToken is IERC20{
     function deposit(uint256 _amount) external;
     function withdraw(uint256 _shares) external;
+    function getPricePerFullShare() external view returns (uint256); // for yTokens
+    function pricePerShare() external view returns (uint256); // for yVaults
 }
