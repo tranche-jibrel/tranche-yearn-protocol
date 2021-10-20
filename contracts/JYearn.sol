@@ -10,13 +10,11 @@ pragma experimental ABIEncoderV2; // needed for getAllAtokens and getAllReserves
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "./TransferETHHelper.sol";
 import "./interfaces/IJAdminTools.sol";
 import "./interfaces/IJTrancheTokens.sol";
 import "./interfaces/IJTranchesDeployer.sol";
 import "./JYearnStorage.sol";
 import "./interfaces/IJYearn.sol";
-import "./TokenInterface.sol";
 import "./interfaces/IWETHGateway.sol";
 import "./interfaces/IIncentivesController.sol";
 import "./interfaces/IYToken.sol";
@@ -31,24 +29,19 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _adminTools price oracle address
      * @param _feesCollector fees collector contract address
      * @param _tranchesDepl tranches deployer contract address
-     * @param _wethAddress weth / wmatic contract address
      * @param _rewardsToken rewards token address (slice token address)
      * @param _blocksPerYear blocks / year
      */
     function initialize(address _adminTools, 
             address _feesCollector, 
             address _tranchesDepl,
-            // address _aaveIncentiveController,
-            address _wethAddress,
             address _rewardsToken,
             uint256 _blocksPerYear) external initializer() {
         OwnableUpgradeable.__Ownable_init();
         adminToolsAddress = _adminTools;
         feesCollectorAddress = _feesCollector;
         tranchesDeployerAddress = _tranchesDepl;
-        // aaveIncentiveControllerAddress = _aaveIncentiveController;
         redeemTimeout = 3; //default
-        wrappedEthAddress = _wethAddress;
         totalBlocksPerYear = _blocksPerYear;
         rewardsToken = _rewardsToken;
     }
@@ -61,8 +54,12 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         _;
     }
 
-    fallback() external payable {}
-    receive() external payable {}
+    fallback() external payable {
+        revert('Fallback not allowed');
+    }
+    receive() external payable {
+        revert('Receive not allowed');
+    }
 
     /**
      * @dev set new addresses for price oracle, fees collector and tranche deployer 
@@ -73,15 +70,11 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     function setNewEnvironment(address _adminTools, 
             address _feesCollector, 
             address _tranchesDepl,
-            // address _aaveIncentiveController,
-            address _wethAddress,
             address _rewardsToken) external onlyOwner{
         require((_adminTools != address(0)) && (_feesCollector != address(0)) && (_tranchesDepl != address(0)), "JYearn: check addresses");
         adminToolsAddress = _adminTools;
         feesCollectorAddress = _feesCollector;
         tranchesDeployerAddress = _tranchesDepl;
-        // aaveIncentiveControllerAddress = _aaveIncentiveController;
-        wrappedEthAddress = _wethAddress;
         rewardsToken = _rewardsToken;
     }
 
@@ -93,6 +86,10 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         incentivesControllerAddress = _incentivesController;
     }
 
+    function getSirControllerAddress() external view override returns (address) {
+        return incentivesControllerAddress;
+    }
+
     /**
      * @dev set how many blocks will be produced per year on the blockchain 
      * @param _newValue new value
@@ -100,21 +97,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     function setBlocksPerYear(uint256 _newValue) external onlyAdmins {
         require(_newValue > 0, "JYearn: new value not allowed");
         totalBlocksPerYear = _newValue;
-    }
-
-    function changeToWeth(address _token) private view returns(address) {
-        if (_token == ETH_ADDR) {
-            return wrappedEthAddress;
-        }
-        return _token;
-    }
-
-    /**
-     * @dev set Weth Gateway contract address
-     * @param _wethGatewayAddress weth gateway contract address
-     */
-    function setWETHGatewayAddress(address _wethGatewayAddress) external onlyAdmins {
-        wethGatewayAddress = _wethGatewayAddress;
     }
 
     /**
@@ -201,26 +183,14 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         trancheAddresses[tranchePairsCounter].yTokenAddress = _yTokenAddress;
         trancheAddresses[tranchePairsCounter].isVault = _isVault;
         trancheAddresses[tranchePairsCounter].ATrancheAddress = 
-                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, msg.sender, rewardsToken);
+                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, msg.sender, rewardsToken/*, tranchePairsCounter*/);
         trancheAddresses[tranchePairsCounter].BTrancheAddress = 
-                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, msg.sender, rewardsToken); 
+                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, msg.sender, rewardsToken/*, tranchePairsCounter*/); 
         
         trancheParameters[tranchePairsCounter].underlyingDecimals = _underlyingDec;
         trancheParameters[tranchePairsCounter].trancheAFixedPercentage = _fixedRpb;
         trancheParameters[tranchePairsCounter].trancheALastActionBlock = block.number;
-        // if we would like to have always 18 decimals
-        /*uint256 tempPrice;
-        if (!_isVault) {
-            tempPrice = IYToken(_yTokenAddress).getPricePerFullShare();
-        } else {
-            tempPrice = IYToken(_yTokenAddress).pricePerShare();
-        }
-        if (_underlyingDec < 18) {
-            uint256 diffDecs = uint256(18).sub(_underlyingDec);
-            tempPrice = tempPrice.mul(10 ** diffDecs);
-        }*/
 
-        // trancheParameters[tranchePairsCounter].storedTrancheAPrice = tempPrice;
         trancheParameters[tranchePairsCounter].storedTrancheAPrice = uint256(1e18);
 
         trancheParameters[tranchePairsCounter].redemptionPercentage = 9950;  //default value 99.5%
@@ -262,7 +232,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of token to be deposited in yaern token V3
      */
     function yearnWithdraw(uint256 _trNum, uint256 _amount) internal returns (uint256 diffBal) {
-        address origToken = changeToWeth(trancheAddresses[_trNum].buyerCoinAddress);
+        address origToken = trancheAddresses[_trNum].buyerCoinAddress;
         address yToken = trancheAddresses[_trNum].yTokenAddress;
 
         if (_amount > IYToken(yToken).balanceOf(address(this)))
@@ -356,10 +326,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     function getTrAValue(uint256 _trancheNum) public view returns (uint256 trANormValue) {
         uint256 totASupply = IERC20Upgradeable(trancheAddresses[_trancheNum].ATrancheAddress).totalSupply();
         uint256 diffDec = uint256(18).sub(uint256(trancheParameters[_trancheNum].underlyingDecimals));
-        // if (diffDec > 0)
-            trANormValue = totASupply.mul(getTrancheAExchangeRate(_trancheNum)).div(1e18).div(10 ** diffDec);
-        // else    
-        //     trANormValue = totASupply.mul(getTrancheAExchangeRate(_trancheNum)).div(1e18);
+        trANormValue = totASupply.mul(getTrancheAExchangeRate(_trancheNum)).div(1e18).div(10 ** diffDec);
         return trANormValue;
     }
 
@@ -446,7 +413,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of tranche A tokens
      * @param _time time to be considered the deposit
      */
-    function setTrAStakingDetails(uint256 _trancheNum, address _account, uint256 _stkNum, uint256 _amount, uint256 _time) external onlyAdmins {
+    function setTrAStakingDetails(uint256 _trancheNum, address _account, uint256 _stkNum, uint256 _amount, uint256 _time) external override onlyAdmins {
         stakeCounterTrA[_account][_trancheNum] = _stkNum;
         StakingDetails storage details = stakingDetailsTrancheA[_account][_trancheNum][_stkNum];
         details.startTime = _time;
@@ -467,9 +434,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
                 if (details.amount <= tmpAmount) {
                     tmpAmount = tmpAmount.sub(details.amount);
                     details.amount = 0;
-                    // delete stakingDetailsTrancheA[msg.sender][_trancheNum][i];
-                    // update details number
-                    // stakeCounterTrA[msg.sender][_trancheNum] = stakeCounterTrA[msg.sender][_trancheNum].sub(1);
                 } else {
                     details.amount = details.amount.sub(tmpAmount);
                     tmpAmount = 0;
@@ -496,7 +460,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of tranche B tokens
      * @param _time time to be considered the deposit
      */
-    function setTrBStakingDetails(uint256 _trancheNum, address _account, uint256 _stkNum, uint256 _amount, uint256 _time) external onlyAdmins {
+    function setTrBStakingDetails(uint256 _trancheNum, address _account, uint256 _stkNum, uint256 _amount, uint256 _time) external override onlyAdmins {
         stakeCounterTrB[_account][_trancheNum] = _stkNum;
         StakingDetails storage details = stakingDetailsTrancheB[_account][_trancheNum][_stkNum];
         details.startTime = _time;
@@ -517,9 +481,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
                 if (details.amount <= tmpAmount) {
                     tmpAmount = tmpAmount.sub(details.amount);
                     details.amount = 0;
-                    // delete stakingDetailsTrancheB[msg.sender][_trancheNum][i];
-                    // update details number
-                    // stakeCounterTrB[msg.sender][_trancheNum] = stakeCounterTrB[msg.sender][_trancheNum].sub(1);
                 } else {
                     details.amount = details.amount.sub(tmpAmount);
                     tmpAmount = 0;
@@ -548,18 +509,11 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         uint256 prevYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
         // address lendingPool = ILendingPoolAddressesProvider(lendingPoolAddressProvider).getLendingPool();
         address _tokenAddr = trancheAddresses[_trancheNum].buyerCoinAddress;
-        if (_tokenAddr == ETH_ADDR) {
-            require(msg.value == _amount, "JYearn: msg.value not equal to amount");
-            IWETHGateway(wethGatewayAddress).depositETH{value: msg.value}();
-            _tokenAddr = wrappedEthAddress;
-        } else {
-            // check approve
-            require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche A");
-            SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
-        }
-
+        // check approve
+        require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche A");
+        SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
         yearnDeposit(_trancheNum, _amount);
-        
+
         uint256 newYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
         setTrancheAExchangeRate(_trancheNum);
         uint256 taAmount;
@@ -657,16 +611,9 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         uint256 prevYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
         // address lendingPool = ILendingPoolAddressesProvider(lendingPoolAddressProvider).getLendingPool();
         address _tokenAddr = trancheAddresses[_trancheNum].buyerCoinAddress;
-        if (_tokenAddr == ETH_ADDR) {
-            require(msg.value == _amount, "JYearn: msg.value not equal to amount");
-            IWETHGateway(wethGatewayAddress).depositETH{value: msg.value}();
-            _tokenAddr = wrappedEthAddress;
-        } else {
-            // check approve
-            require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche B");
-            SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
-        }
-
+        // check approve
+        require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche B");
+        SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(_tokenAddr), msg.sender, address(this), _amount);
         yearnDeposit(_trancheNum, _amount);
 
         uint256 newYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
@@ -752,27 +699,12 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     }
 
     /**
-     * @dev get eth balance on this contract
-     */
-    function getEthBalance() public view returns (uint256) {
-        return address(this).balance;
-    }
-
-    /**
      * @dev transfer tokens in this contract to fees collector contract
      * @param _tokenContract token contract address
      * @param _amount token amount to be transferred 
      */
     function transferTokenToFeesCollector(address _tokenContract, uint256 _amount) external onlyAdmins {
         SafeERC20Upgradeable.safeTransfer(IERC20Upgradeable(_tokenContract), feesCollectorAddress, _amount);
-    }
-
-    /**
-     * @dev transfer ethers in this contract to fees collector contract
-     * @param _amount ethers amount to be transferred 
-     */
-    function withdrawEthToFeesCollector(uint256 _amount) external onlyAdmins {
-        TransferETHHelper.safeTransferETH(feesCollectorAddress, _amount);
     }
     
     /**

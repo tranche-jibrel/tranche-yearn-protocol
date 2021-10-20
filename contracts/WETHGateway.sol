@@ -11,25 +11,14 @@ import "./TransferETHHelper.sol";
 contract WETHGateway is IWETHGateway, Ownable {
 
   IWETH internal immutable WETH;
-  address internal jAaveAddress;
+  address internal jYearnAddress;
 
   /**
    * @dev Sets the WETH address and the jAave contract address. Infinite approves lending pool.
    * @param _weth Address of the Wrapped Ether contract
-   * @param _jAaveAddress Address of the JAvve contract
    **/
-  constructor(address _weth, address _jAaveAddress) {
-    jAaveAddress = _jAaveAddress;
+  constructor(address _weth/*, address _jYearnAddress*/) {
     WETH = IWETH(_weth);
-    IWETH(_weth).approve(_jAaveAddress, type(uint).max);
-  }
-
-  /**
-   * @dev set JAave contract address 
-   **/
-  function setJAaveAddress(address _jAaveAddress) external onlyOwner {
-    require(_jAaveAddress != address(0), "WETHGateway: address not allowed");
-    jAaveAddress = _jAaveAddress;
   }
 
   /**
@@ -38,7 +27,7 @@ contract WETHGateway is IWETHGateway, Ownable {
   function depositETH() external payable override {
     WETH.deposit{value: msg.value}();
     uint256 wethBalance = IERC20(address(WETH)).balanceOf(address(this));
-    IERC20(address(WETH)).transfer(jAaveAddress, wethBalance);
+    IERC20(address(WETH)).transfer(msg.sender, wethBalance);
   }
 
   /**
@@ -47,7 +36,7 @@ contract WETHGateway is IWETHGateway, Ownable {
    */
   function withdrawETH(uint256 _amount) external override {
     WETH.withdraw(_amount);
-    TransferETHHelper.safeTransferETH(jAaveAddress, _amount);
+    TransferETHHelper.safeTransferETH(msg.sender, _amount);
   }
 
   /**

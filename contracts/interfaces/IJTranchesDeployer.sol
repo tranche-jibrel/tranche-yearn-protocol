@@ -7,6 +7,6 @@
 pragma solidity ^0.8.0;
 
 interface IJTranchesDeployer {
-    function deployNewTrancheATokens(string calldata _nameA, string calldata _symbolA, address _sender, address _rewardToken) external returns (address);
-    function deployNewTrancheBTokens(string calldata _nameB, string calldata _symbolB, address _sender, address _rewardToken) external returns (address);
+    function deployNewTrancheATokens(string calldata _nameA, string calldata _symbolA, address _sender, address _rewardToken/*, uint256 _trNum*/) external returns (address);
+    function deployNewTrancheBTokens(string calldata _nameB, string calldata _symbolB, address _sender, address _rewardToken/*, uint256 _trNum*/) external returns (address);
 }

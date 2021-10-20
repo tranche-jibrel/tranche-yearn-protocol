@@ -38,7 +38,7 @@ or to test a single file:
 truffle run coverage --network development --file="<filename>"   
 ```
 
-Test coverage on JYearn contract: 92.39%
+Test coverage on JYearn contract: 94.27%
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
@@ -94,12 +94,12 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>20.44</code></td>
+            <td><code>19.28</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens.</td>
         </tr>
         <tr>
             <td>JYearnStorage</td>
-            <td><code>2.07</code></td>
+            <td><code>1.96</code></td>
             <td>Core contract protocol (storage)</td>
         </tr>
         <tr>
@@ -144,8 +144,8 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>WETHGateway</td>
-            <td><code>2.43</code></td>
-            <td>Ethereum gateway, useful when dealing with ethers</td>
+            <td><code>2.21</code></td>
+            <td>Ethereum gateway, useful when dealing with ethers and to have a simple contract to change ETH in WETH and viceversa</td>
         </tr>
     </tbody>
   </table>

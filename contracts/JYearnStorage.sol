@@ -42,9 +42,6 @@ contract JYearnStorage is OwnableUpgradeable {
     address public feesCollectorAddress;
     address public tranchesDeployerAddress;
     address public lendingPoolAddressProvider;
-    address public wethGatewayAddress;
-    address public aaveIncentiveControllerAddress;
-    address public wrappedEthAddress;
 
     uint256 public tranchePairsCounter;
     uint256 public totalBlocksPerYear; 

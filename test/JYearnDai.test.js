@@ -271,7 +271,7 @@ contract("DAI JYearn", function(accounts) {
       await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
       await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
 
-      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, yWETH_Address, rewTok, {from: tokenOwner})
+      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
 
       await jYearnContract.setBlocksPerYear(2102400)
 
@@ -293,11 +293,7 @@ contract("DAI JYearn", function(accounts) {
       await jYearnContract.getSingleTrancheUserStakeCounterTrB(user1, 1)
       await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrB(user1, 1, 1)
 
-      await jYearnContract.getEthBalance()
-
       await jYearnContract.transferTokenToFeesCollector(rewTok, 0)
-
-      await jYearnContract.withdrawEthToFeesCollector(0)
 
       await jYearnContract.getYFIUnclaimedRewardShares()
       await expectRevert(jYearnContract.claimYearnRewards(10), "JYearn: not enough YFI tokens to claim rewards")

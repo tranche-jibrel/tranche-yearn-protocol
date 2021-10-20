@@ -12,7 +12,6 @@ var JTrancheAToken = artifacts.require('JTrancheAToken');
 var JTrancheBToken = artifacts.require('JTrancheBToken');
 
 var myERC20 = artifacts.require("./mocks/myERC20.sol");
-var WETHToken = artifacts.require('WETH9_');
 var WETHGateway = artifacts.require('WETHGateway');
 
 var IncentivesController = artifacts.require('./IncentivesController');
@@ -20,17 +19,18 @@ var IncentivesController = artifacts.require('./IncentivesController');
 const MYERC20_TOKEN_SUPPLY = 5000000;
 //const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-const WETH_ADDR = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+
 //const WETH_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // mainnet
 //const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'; // kovan
 const DAI_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
 
 const yWETH_Address = '0x87b1f4cf9BD63f7BBD3eE1aD04E8F52540349347';
-const yvWETH_Address = '0xa258C4606Ca8206D8aA700cE2143D7db854D168c';
 const yDAI_Address = '0xC2cB1040220768554cf699b0d863A3cd4324ce32';
 const yUSDC_Address = '0xd6aD7a6750A7593E092a9B218d66C0A814a3436e';
 const yvUSDC_Address = '0x5f18C75AbDAe578b483E5F43f12a39cF75b973a9';
+const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
+const yvWETH_Address = '0xa258C4606Ca8206D8aA700cE2143D7db854D168c';
 
 
 module.exports = async (deployer, network, accounts) => {
@@ -49,35 +49,35 @@ module.exports = async (deployer, network, accounts) => {
     const JTDeployer = await deployProxy(JTranchesDeployer, [], { from: factoryOwner });
     console.log("Tranches Deployer: " + JTDeployer.address);
 
-    await deployer.deploy(WETHToken);
-    const JWethinstance = await WETHToken.deployed();
-    console.log('WETH Token Deployed: ', JWethinstance.address);
+    // await deployer.deploy(WETHToken);
+    // const JWethinstance = await WETHToken.deployed();
+    // console.log('WETH Token Deployed: ', JWethinstance.address);
 
     const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployer.address,
-      JWethinstance.address, mySLICEinstance.address, 2102400], { from: factoryOwner });
+      /*WETH_ADDRESS,*/ mySLICEinstance.address, 2102400], { from: factoryOwner });
     console.log('JYearn Deployed: ', JYInstance.address);
 
-    await deployer.deploy(WETHGateway, JWethinstance.address, JYInstance.address);
-    const JWGinstance = await WETHGateway.deployed();
-    console.log('WETHGateway Deployed: ', JWGinstance.address);
+    // await deployer.deploy(WETHGateway, WETH_ADDRESS);
+    // const JWGinstance = await WETHGateway.deployed();
+    // console.log('WETHGateway Deployed: ', JWGinstance.address);
 
-    await JYInstance.setWETHGatewayAddress(JWGinstance.address, { from: factoryOwner });
+    // await JYInstance.setWETHGatewayAddress(JWGinstance.address, { from: factoryOwner });
 
     await JTDeployer.setJYearnAddress(JYInstance.address, { from: factoryOwner });
     
-    await JYInstance.addTrancheToProtocol(WETH_ADDR, yvWETH_Address, true, "jWEthTrancheAToken", "ayvWEA", "jWEthTrancheBToken", "byvWEB", web3.utils.toWei("0.04", "ether"), 18, { from: factoryOwner });
+    await JYInstance.addTrancheToProtocol(WETH_ADDRESS, yvWETH_Address, true, "jWEthTrancheAToken", "ayvWEA", "jWEthTrancheBToken", "byvWEB", web3.utils.toWei("0.04", "ether"), 18, { from: factoryOwner });
     trParams = await JYInstance.trancheAddresses(0);
-    let EthTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
-    console.log("Eth Tranche A Token Address: " + EthTrA.address);
-    let EthTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
-    console.log("Eth Tranche B Token Address: " + EthTrB.address);
+    let WEthTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
+    console.log("WETH Tranche A Token Address: " + WEthTrA.address);
+    let WEthTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
+    console.log("WETH Tranche B Token Address: " + WEthTrB.address);
 
     await JYInstance.setTrancheDeposit(0, true);
 
     await JYInstance.addTrancheToProtocol(DAI_ADDRESS, yDAI_Address, false, "jDaiTrancheAToken", "ayDAI", "jDaiTrancheBToken", "byDAI", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
     trParams = await JYInstance.trancheAddresses(1);
     let DaiTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
-    console.log("DAi Tranche A Token Address: " + DaiTrA.address);
+    console.log("DAI Tranche A Token Address: " + DaiTrA.address);
     let DaiTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
     console.log("DAI Tranche B Token Address: " + DaiTrB.address);
 
