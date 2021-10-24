@@ -183,9 +183,9 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         trancheAddresses[tranchePairsCounter].yTokenAddress = _yTokenAddress;
         trancheAddresses[tranchePairsCounter].isVault = _isVault;
         trancheAddresses[tranchePairsCounter].ATrancheAddress = 
-                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, msg.sender, rewardsToken/*, tranchePairsCounter*/);
+                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, /*msg.sender,*/ tranchePairsCounter);
         trancheAddresses[tranchePairsCounter].BTrancheAddress = 
-                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, msg.sender, rewardsToken/*, tranchePairsCounter*/); 
+                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, /*msg.sender,*/ tranchePairsCounter); 
         
         trancheParameters[tranchePairsCounter].underlyingDecimals = _underlyingDec;
         trancheParameters[tranchePairsCounter].trancheAFixedPercentage = _fixedRpb;
@@ -194,6 +194,10 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         trancheParameters[tranchePairsCounter].storedTrancheAPrice = uint256(1e18);
 
         trancheParameters[tranchePairsCounter].redemptionPercentage = 9950;  //default value 99.5%
+
+        // add tokens in adminTools contracts so they can change staking details
+        IJAdminTools(adminToolsAddress).addAdmin(trancheAddresses[tranchePairsCounter].ATrancheAddress);
+        IJAdminTools(adminToolsAddress).addAdmin(trancheAddresses[tranchePairsCounter].BTrancheAddress);
 
         calcRPBFromPercentage(tranchePairsCounter); // initialize tranche A RPB
 

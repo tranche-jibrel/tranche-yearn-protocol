@@ -52,6 +52,7 @@ contract("DAI JYearn", function(accounts) {
     //accounts = await web3.eth.getAccounts();
     tokenOwner = accounts[0];
     user1 = accounts[1];
+    user2 = accounts[2];
     console.log(tokenOwner);
     console.log(await web3.eth.getBalance(tokenOwner));
     console.log(await web3.eth.getBalance(UnBlockedAccount));
@@ -179,7 +180,7 @@ contract("DAI JYearn", function(accounts) {
     tx = await daiContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
     tx = await jYearnContract.buyTrancheBToken(1, toWei(10), {from: user1});
     console.log("User1 New DAI balance: " + fromWei(await daiContract.methods.balanceOf(user1).call()) + " DAI");
-    console.log("User1 trB tokens: " + fromWei(await daiTrBContract.balanceOf(user1)) + " DTB");
+    console.log("User1 trB tokens: " + fromWei(await daiTrBContract.balanceOf(user1)) + " byDai");
     console.log("JYearn DAI balance: " + fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
     trAddresses = await jYearnContract.trancheAddresses(1);
@@ -194,10 +195,48 @@ contract("DAI JYearn", function(accounts) {
     console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   });
 
+  it('transferring Tranche A tokens should also transfer staking details', async function () {
+    bal1 = await daiTrAContract.balanceOf(user1)
+    console.log("user1 trA Balance: " + fromWei(bal1) + " ayDai")
+    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 1, 1);
+    console.log("user1 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+    bal2 = await daiTrAContract.balanceOf(user2)
+    expect(bal2.toString()).to.be.equal("0")
+    
+    await daiTrAContract.transfer(user2, toWei(5), {from: user1});
+    bal1 = await daiTrAContract.balanceOf(user1)
+    bal2 = await daiTrAContract.balanceOf(user2)
+    console.log("user1 trA Balance: " + fromWei(bal1) + " ayDai")
+    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 1, 1);
+    console.log("user1 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+    console.log("user2 trA Balance: " + fromWei(bal2) + " ayDai")
+    stkDetails = await jYearnContract.stakingDetailsTrancheA(user2, 1, 1);
+    console.log("user2 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+  });
+
+  it('transferring Tranche B tokens should also transfer staking details', async function () {
+    bal1 = await daiTrBContract.balanceOf(user1)
+    console.log("user1 trB Balance: " + fromWei(bal1) + " byDai")
+    stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 1, 1);
+    console.log("user1 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+    bal2 = await daiTrBContract.balanceOf(user2)
+    expect(bal2.toString()).to.be.equal("0")
+    
+    await daiTrBContract.transfer(user2, toWei(5), {from: user1});
+    bal1 = await daiTrBContract.balanceOf(user1)
+    bal2 = await daiTrBContract.balanceOf(user2)
+    console.log("user1 trB Balance: " + fromWei(bal1) + " byDai")
+    stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 1, 1);
+    console.log("user1 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+    console.log("user2 trB Balance: " + fromWei(bal2) + " byDai")
+    stkDetails = await jYearnContract.stakingDetailsTrancheB(user2, 1, 1);
+    console.log("user2 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+  });
+
   it('time passes...', async function () {
     let block = await web3.eth.getBlock("latest");
     console.log("Actual Block: " + block.number);
-    newBlock = block.number + 100;
+    newBlock = block.number + 10;
     await time.advanceBlockTo(newBlock);
     block = await web3.eth.getBlock("latest");
     console.log("New Actual Block: " + block.number);
@@ -207,9 +246,9 @@ contract("DAI JYearn", function(accounts) {
     oldBal = fromWei(await daiContract.methods.balanceOf(user1).call());
     console.log("User1 Dai balance: "+ oldBal + " DAI");
     bal = await daiTrAContract.balanceOf(user1);
-    console.log("User1 trA tokens: "+ fromWei(bal) + " DTA");
+    console.log("User1 trA tokens: "+ fromWei(bal) + " ayDai");
     tot = await daiTrAContract.totalSupply();
-    console.log("trA tokens total: "+ fromWei(tot) + " DTA");
+    console.log("trA tokens total: "+ fromWei(tot) + " ayDai");
     console.log("JYearn yDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     tx = await daiTrAContract.approve(jYearnContract.address, bal, {from: user1});
     trPar = await jYearnContract.trancheParameters(1);
@@ -218,7 +257,7 @@ contract("DAI JYearn", function(accounts) {
     newBal = fromWei(await daiContract.methods.balanceOf(user1).call());
     console.log("User1 New Dai balance: "+ newBal + " DAI");
     bal = await daiTrAContract.balanceOf(user1);
-    console.log("User1 trA tokens: "+ fromWei(bal) + " DTA");
+    console.log("User1 trA tokens: "+ fromWei(bal) + " ayDai");
     console.log("User1 trA interest: "+ (newBal - oldBal) + " DAI");
     console.log("JYearn new DAI balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
@@ -231,10 +270,38 @@ contract("DAI JYearn", function(accounts) {
     console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
+  it("user2 redeems token daiTrA", async function () {
+    oldBal = fromWei(await daiContract.methods.balanceOf(user2).call());
+    console.log("User2 Dai balance: "+ oldBal + " DAI");
+    bal = await daiTrAContract.balanceOf(user2);
+    console.log("User2 trA tokens: "+ fromWei(bal) + " ayDai");
+    tot = await daiTrAContract.totalSupply();
+    console.log("trA tokens total: "+ fromWei(tot) + " ayDai");
+    console.log("JYearn yDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
+    tx = await daiTrAContract.approve(jYearnContract.address, bal, {from: user2});
+    trPar = await jYearnContract.trancheParameters(1);
+    console.log("TrA price: " + fromWei(trPar[2].toString()));
+    tx = await jYearnContract.redeemTrancheAToken(1, bal, {from: user2});
+    newBal = fromWei(await daiContract.methods.balanceOf(user2).call());
+    console.log("User2 New Dai balance: "+ newBal + " DAI");
+    bal = await daiTrAContract.balanceOf(user2);
+    console.log("User2 trA tokens: "+ fromWei(bal) + " ayDai");
+    console.log("User2 trA interest: "+ (newBal - oldBal) + " DAI");
+    console.log("JYearn new DAI balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
+    console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
+    console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
+
+    console.log("staker counter trA: " + (await jYearnContract.stakeCounterTrA(user2, 1)).toString())
+    stkDetails = await jYearnContract.stakingDetailsTrancheA(user2, 1, 1);
+    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+    stkDetails = await jYearnContract.stakingDetailsTrancheA(user2, 1, 2);
+    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+  }); 
+
   it('time passes...', async function () {
     let block = await web3.eth.getBlock("latest");
     console.log("Actual Block: " + block.number);
-    newBlock = block.number + 100;
+    newBlock = block.number + 10;
     await time.advanceBlockTo(newBlock);
     block = await web3.eth.getBlock("latest");
     console.log("New Actual Block: " + block.number);
@@ -244,8 +311,8 @@ contract("DAI JYearn", function(accounts) {
     oldBal = fromWei(await daiContract.methods.balanceOf(user1).call());
     console.log("User1 Dai balance: "+ oldBal + " DAI");
     bal = await daiTrBContract.balanceOf(user1);
-    console.log("User1 trB tokens: "+ fromWei(bal) + " DTB");
-    console.log("JYearn cDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
+    console.log("User1 trB tokens: "+ fromWei(bal) + " byDai");
+    console.log("JYearn yDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     tx = await daiTrBContract.approve(jYearnContract.address, bal, {from: user1});
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
     console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(1)));
@@ -253,7 +320,7 @@ contract("DAI JYearn", function(accounts) {
     newBal = fromWei(await daiContract.methods.balanceOf(user1).call());
     console.log("User1 New Dai balance: "+ newBal + " DAI");
     bal = await daiTrBContract.balanceOf(user1);
-    console.log("User1 trB tokens: "+ fromWei(bal) + " DTB");
+    console.log("User1 trB tokens: "+ fromWei(bal) + " byDai");
     console.log("User1 trB interest: "+ (newBal - oldBal) + " DAI");
     console.log("JYearn new DAI balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     console.log("TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
@@ -265,11 +332,34 @@ contract("DAI JYearn", function(accounts) {
     console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
+  it("user2 redeems token daiTrB", async function () {
+    oldBal = fromWei(await daiContract.methods.balanceOf(user2).call());
+    console.log("User2 Dai balance: "+ oldBal + " DAI");
+    bal = await daiTrBContract.balanceOf(user2);
+    console.log("User2 trB tokens: "+ fromWei(bal) + " byDai");
+    console.log("JYearn yDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
+    tx = await daiTrBContract.approve(jYearnContract.address, bal, {from: user2});
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
+    console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(1)));
+    tx = await jYearnContract.redeemTrancheBToken(1, bal, {from: user2});
+    newBal = fromWei(await daiContract.methods.balanceOf(user2).call());
+    console.log("User2 New Dai balance: "+ newBal + " DAI");
+    bal = await daiTrBContract.balanceOf(user2);
+    console.log("User2 trB tokens: "+ fromWei(bal) + " byDai");
+    console.log("User2 trB interest: "+ (newBal - oldBal) + " DAI");
+    console.log("JYearn new DAI balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
+    console.log("TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
+    console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(1)));
+    console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
+
+    console.log("staker counter trB: " + (await jYearnContract.stakeCounterTrB(user2, 1)).toString())
+    stkDetails = await jYearnContract.stakingDetailsTrancheB(user2, 1, 1);
+    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
+  }); 
+
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
       rewTok = await jYearnContract.rewardsToken()
-      await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
-      await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
 
       await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
 

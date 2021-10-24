@@ -271,8 +271,6 @@ contract("WETH JYearn", function(accounts) {
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
       rewTok = await jYearnContract.rewardsToken()
-      await wethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
-      await wethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
 
       await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
 

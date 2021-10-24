@@ -129,13 +129,6 @@ contract("USDC JYearn", function(accounts) {
     console.log(usdcTrBContract.address);
   });
 
-  it('changing reward token address', async function () {
-    rewTok = await jYearnContract.rewardsToken()
-    // console.log(rewTok)
-    await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
-    await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
-  });
-
   // it("check if there are some USDC in unblocked account", async function () {
   //   console.log(await usdcContract.methods.balanceOf(UnBlockedAccount).call())
   // });
@@ -277,8 +270,6 @@ contract("USDC JYearn", function(accounts) {
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
       rewTok = await jYearnContract.rewardsToken()
-      await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
-      await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
 
       await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
 

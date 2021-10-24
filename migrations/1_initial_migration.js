@@ -20,8 +20,6 @@ const MYERC20_TOKEN_SUPPLY = 5000000;
 //const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
-//const WETH_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // mainnet
-//const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'; // kovan
 const DAI_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
 
@@ -49,23 +47,16 @@ module.exports = async (deployer, network, accounts) => {
     const JTDeployer = await deployProxy(JTranchesDeployer, [], { from: factoryOwner });
     console.log("Tranches Deployer: " + JTDeployer.address);
 
-    // await deployer.deploy(WETHToken);
-    // const JWethinstance = await WETHToken.deployed();
-    // console.log('WETH Token Deployed: ', JWethinstance.address);
-
-    const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployer.address,
-      /*WETH_ADDRESS,*/ mySLICEinstance.address, 2102400], { from: factoryOwner });
+    const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, 
+        JTDeployer.address, mySLICEinstance.address, 2102400], { from: factoryOwner });
     console.log('JYearn Deployed: ', JYInstance.address);
 
-    // await deployer.deploy(WETHGateway, WETH_ADDRESS);
-    // const JWGinstance = await WETHGateway.deployed();
-    // console.log('WETHGateway Deployed: ', JWGinstance.address);
-
-    // await JYInstance.setWETHGatewayAddress(JWGinstance.address, { from: factoryOwner });
+    await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
 
     await JTDeployer.setJYearnAddress(JYInstance.address, { from: factoryOwner });
     
-    await JYInstance.addTrancheToProtocol(WETH_ADDRESS, yvWETH_Address, true, "jWEthTrancheAToken", "ayvWEA", "jWEthTrancheBToken", "byvWEB", web3.utils.toWei("0.04", "ether"), 18, { from: factoryOwner });
+    await JYInstance.addTrancheToProtocol(WETH_ADDRESS, yvWETH_Address, true, "jWEthTrancheAToken", "ayvWEA", 
+      "jWEthTrancheBToken", "byvWEB", web3.utils.toWei("0.04", "ether"), 18, { from: factoryOwner });
     trParams = await JYInstance.trancheAddresses(0);
     let WEthTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
     console.log("WETH Tranche A Token Address: " + WEthTrA.address);
@@ -74,7 +65,13 @@ module.exports = async (deployer, network, accounts) => {
 
     await JYInstance.setTrancheDeposit(0, true);
 
-    await JYInstance.addTrancheToProtocol(DAI_ADDRESS, yDAI_Address, false, "jDaiTrancheAToken", "ayDAI", "jDaiTrancheBToken", "byDAI", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
+    // console.log(await WEthTrA.owner())
+    // console.log(await WEthTrB.owner())
+
+    // await JTDeployer.setNewJYearnTokens(JYInstance.address, WEthTrA.address, WEthTrB.address, { from: factoryOwner });
+
+    await JYInstance.addTrancheToProtocol(DAI_ADDRESS, yDAI_Address, false, "jDaiTrancheAToken", "ayDAI", 
+      "jDaiTrancheBToken", "byDAI", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
     trParams = await JYInstance.trancheAddresses(1);
     let DaiTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
     console.log("DAI Tranche A Token Address: " + DaiTrA.address);
@@ -83,7 +80,8 @@ module.exports = async (deployer, network, accounts) => {
 
     await JYInstance.setTrancheDeposit(1, true);
 
-    await JYInstance.addTrancheToProtocol(USDC_ADDRESS, yvUSDC_Address, true, "jUsdcTrancheAToken", "ayUSDC", "jUsdcTrancheBToken", "byUSDC", web3.utils.toWei("0.03", "ether"), 6, { from: factoryOwner });
+    await JYInstance.addTrancheToProtocol(USDC_ADDRESS, yvUSDC_Address, true, "jUsdcTrancheAToken", "ayUSDC", 
+      "jUsdcTrancheBToken", "byUSDC", web3.utils.toWei("0.03", "ether"), 6, { from: factoryOwner });
     trParams = await JYInstance.trancheAddresses(2);
     let UsdcTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
     console.log("USDC Tranche A Token Address: " + UsdcTrA.address);
@@ -98,7 +96,6 @@ module.exports = async (deployer, network, accounts) => {
     await JYInstance.setincentivesControllerAddress(JIController.address);
 
   } else if (network == "kovan") {
-    // AAVE_TRANCHE_ADDRESS=0x0D98E839E7db6A6507A0CAd59c4C23cBD7bAB6Af
     let { FEE_COLLECTOR_ADDRESS, PRICE_ORACLE_ADDRESS, REWARD_TOKEN_ADDRESS, IS_UPGRADE, AAVE_POOL, ADAI_ADDRESS, DAI_ADDRESS, AAVE_INCENTIVE_CONTROLLER } = process.env;
     const accounts = await web3.eth.getAccounts();
     const factoryOwner = accounts[0];
