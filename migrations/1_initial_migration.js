@@ -48,7 +48,7 @@ module.exports = async (deployer, network, accounts) => {
     console.log("Tranches Deployer: " + JTDeployer.address);
 
     const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, 
-        JTDeployer.address, mySLICEinstance.address, 2102400], { from: factoryOwner });
+        JTDeployer.address, mySLICEinstance.address], { from: factoryOwner });
     console.log('JYearn Deployed: ', JYInstance.address);
 
     await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })

@@ -14,6 +14,8 @@ const Web3 = require('web3');
 // Ganache UI on 8545
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
+const timeMachine = require('ganache-time-traveler');
+
 const fs = require('fs');
 const yVault_ABI_V1 = JSON.parse(fs.readFileSync('./test/utils/yVaultV1.abi', 'utf8'));
 const yVault_ABI_V2 = JSON.parse(fs.readFileSync('./test/utils/yVaultV2.abi', 'utf8'));
@@ -136,11 +138,11 @@ contract("DAI JYearn", function(accounts) {
     trAddresses = await jYearnContract.trancheAddresses(1); //.cTokenAddress;
     console.log("addresses tranche A: " + JSON.stringify(trAddresses, ["buyerCoinAddress", "yTokenAddress", "ATrancheAddress", "BTrancheAddress"]));
     trPar = await jYearnContract.trancheParameters(1);
-    console.log("param tranche A: " + JSON.stringify(trPar, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPB", "underlyingDecimals"]));
-    tx = await jYearnContract.calcRPBFromPercentage(1, {from: user1});
+    console.log("param tranche A: " + JSON.stringify(trPar, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPS", "underlyingDecimals"]));
+    tx = await jYearnContract.calcRPSFromPercentage(1, {from: user1});
 
     trPar = await jYearnContract.trancheParameters(1);
-    console.log("rpb tranche A: " + trPar[3].toString());
+    console.log("rps tranche A: " + trPar[3].toString());
     console.log("price tranche A: " + fromWei(trPar[2].toString()));
     trParams = await jYearnContract.trancheAddresses(1);
     expect(trParams.buyerCoinAddress).to.be.equal(DAI_ADDRESS);
@@ -249,6 +251,29 @@ contract("DAI JYearn", function(accounts) {
     console.log("New Actual Block: " + block.number);
   });
 
+  it('check if tranche prices are ok after some time', async function () {
+    // tx = await jYearnContract.calcRPSFromPercentage(1, {from: user1});
+    // trPar = await jYearnContract.trancheParameters(1);
+    // console.log("rate per second on TrA DAI: " + trPar[3].toString());
+    // console.log("TrA price: " + fromWei(trPar[2].toString()));
+    // console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
+    // console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(1)));
+    // console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
+
+    const maturity = Number(time.duration.seconds(1000));
+    let block = await web3.eth.getBlockNumber();
+    await timeMachine.advanceTimeAndBlock(maturity);
+    block = await web3.eth.getBlockNumber()
+  
+    // tx = await jYearnContract.calcRPSFromPercentage(1, {from: user1});
+    // trPar = await jYearnContract.trancheParameters(1);
+    // console.log("TrA price: " + fromWei(trPar[2].toString()));
+    // console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
+    // console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(1)));
+    // console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
+
+  })
+
   it("user1 redeems token daiTrA", async function () {
     oldBal = fromWei(await daiContract.methods.balanceOf(user1).call());
     console.log("User1 Dai balance: "+ oldBal + " DAI");
@@ -261,6 +286,8 @@ contract("DAI JYearn", function(accounts) {
     trPar = await jYearnContract.trancheParameters(1);
     console.log("TrA price: " + fromWei(trPar[2].toString()));
     tx = await jYearnContract.redeemTrancheAToken(1, bal, {from: user1});
+    trPar = await jYearnContract.trancheParameters(1);
+    console.log("Redemption TrA price: " + fromWei(trPar[2].toString()));
     newBal = fromWei(await daiContract.methods.balanceOf(user1).call());
     console.log("User1 New Dai balance: "+ newBal + " DAI");
     bal = await daiTrAContract.balanceOf(user1);
@@ -289,6 +316,7 @@ contract("DAI JYearn", function(accounts) {
     trPar = await jYearnContract.trancheParameters(1);
     console.log("TrA price: " + fromWei(trPar[2].toString()));
     tx = await jYearnContract.redeemTrancheAToken(1, bal, {from: user2});
+    console.log("Redemption TrA price: " + fromWei(trPar[2].toString()));
     newBal = fromWei(await daiContract.methods.balanceOf(user2).call());
     console.log("User2 New Dai balance: "+ newBal + " DAI");
     bal = await daiTrAContract.balanceOf(user2);
@@ -370,8 +398,6 @@ contract("DAI JYearn", function(accounts) {
 
       await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
 
-      await jYearnContract.setBlocksPerYear(2102400)
-
       await jYearnContract.setDecimals(1, 18)
 
       await jYearnContract.setTrancheRedemptionPercentage(1, 50)
@@ -380,7 +406,7 @@ contract("DAI JYearn", function(accounts) {
 
       await jYearnContract.setTrancheAFixedPercentage(1, web3.utils.toWei("0.03", "ether"))
 
-      await jYearnContract.getTrancheACurrentRPB(1)
+      await jYearnContract.getTrancheACurrentRPS(1)
 
       await jYearnContract.setTrAStakingDetails(1, user1, 1, 0, 1634150567)
       await jYearnContract.getSingleTrancheUserStakeCounterTrA(user1, 1)

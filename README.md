@@ -124,7 +124,7 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>19.46</code></td>
+            <td><code>19.11</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens. Upgradeable.</td>
         </tr>
         <tr>
