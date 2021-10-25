@@ -80,7 +80,8 @@ module.exports = {
       provider: () =>
         new HDWalletProvider(
           process.env.mnemonic,
-          `https://black-wispy-glitter.fantom.quiknode.pro/${process.env.INFURA_KEY}`
+          "https://rpc.ftm.tools/"
+          //`https://black-wispy-glitter.fantom.quiknode.pro/${process.env.INFURA_KEY}`
         ),
       network_id: 250,
       timeoutBlocks: 200,
