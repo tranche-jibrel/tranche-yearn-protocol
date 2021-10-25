@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades');
-//var { abi } = require('../build/contracts/myERC20.json');
 
 var JFeesCollector = artifacts.require("JFeesCollector");
 var JAdminTools = artifacts.require("JAdminTools");
@@ -17,8 +16,6 @@ var WETHGateway = artifacts.require('WETHGateway');
 var IncentivesController = artifacts.require('./IncentivesController');
 
 const MYERC20_TOKEN_SUPPLY = 5000000;
-//const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
 const DAI_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
@@ -64,11 +61,6 @@ module.exports = async (deployer, network, accounts) => {
     console.log("WETH Tranche B Token Address: " + WEthTrB.address);
 
     await JYInstance.setTrancheDeposit(0, true);
-
-    // console.log(await WEthTrA.owner())
-    // console.log(await WEthTrB.owner())
-
-    // await JTDeployer.setNewJYearnTokens(JYInstance.address, WEthTrA.address, WEthTrB.address, { from: factoryOwner });
 
     await JYInstance.addTrancheToProtocol(DAI_ADDRESS, yDAI_Address, false, "jDaiTrancheAToken", "ayDAI",
       "jDaiTrancheBToken", "byDAI", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
@@ -179,6 +171,5 @@ module.exports = async (deployer, network, accounts) => {
 
     await JYInstance.setincentivesControllerAddress(JIController.address);
     console.log('incentive controller setup')
-
   }
 }

@@ -10,14 +10,8 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract JYearnStorage is OwnableUpgradeable {
 /* WARNING: NEVER RE-ORDER VARIABLES! Always double-check that new variables are added APPEND-ONLY. Re-ordering variables can permanently BREAK the deployed proxy contract.*/
-    //address public constant WETH_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // mainnet
-    //address public constant WETH_ADDRESS = 0xd0A1E359811322d97991E03f863a0C30C2cF029C; // kovan
-    address public constant ETH_ADDR = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-    address public constant WETH_ADDR = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-
     address public constant YFI_TOKEN_ADDRESS = 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e;
     address public constant YFI_REWARDS_ADDRESS = 0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862;
-    address public constant ADAI_ADDRESS = 0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d;
 
     uint256 public constant PERCENT_DIVIDER = 10000;  // percentage divider
     uint256 public constant SECONDS_PER_YEAR = 31557600;  // 60 sec * 60 min * 24 h * 365.25 d (leap years included)

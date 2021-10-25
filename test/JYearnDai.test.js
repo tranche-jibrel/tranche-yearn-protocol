@@ -249,29 +249,11 @@ contract("DAI JYearn", function(accounts) {
     await time.advanceBlockTo(newBlock);
     block = await web3.eth.getBlock("latest");
     console.log("New Actual Block: " + block.number);
-  });
-
-  it('check if tranche prices are ok after some time', async function () {
-    // tx = await jYearnContract.calcRPSFromPercentage(1, {from: user1});
-    // trPar = await jYearnContract.trancheParameters(1);
-    // console.log("rate per second on TrA DAI: " + trPar[3].toString());
-    // console.log("TrA price: " + fromWei(trPar[2].toString()));
-    // console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
-    // console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(1)));
-    // console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
-
+  
     const maturity = Number(time.duration.seconds(1000));
-    let block = await web3.eth.getBlockNumber();
+    block = await web3.eth.getBlockNumber();
     await timeMachine.advanceTimeAndBlock(maturity);
     block = await web3.eth.getBlockNumber()
-  
-    // tx = await jYearnContract.calcRPSFromPercentage(1, {from: user1});
-    // trPar = await jYearnContract.trancheParameters(1);
-    // console.log("TrA price: " + fromWei(trPar[2].toString()));
-    // console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
-    // console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(1)));
-    // console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
-
   })
 
   it("user1 redeems token daiTrA", async function () {

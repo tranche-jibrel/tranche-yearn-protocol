@@ -302,9 +302,6 @@ contract("USDC JYearn", function(accounts) {
 
       await jYearnContract.getYFIUnclaimedRewardShares()
       await expectRevert(jYearnContract.claimYearnRewards(10), "JYearn: not enough YFI tokens to claim rewards")
-
     });
-
   })
-
 });

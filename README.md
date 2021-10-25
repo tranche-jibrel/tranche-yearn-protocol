@@ -104,17 +104,17 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JTrancheAToken</td>
-            <td><code>7.24</code></td>
+            <td><code>6.84</code></td>
             <td>Tranche A token, with a non decreasing price, making possible for holders to have a fixed interest percentage. Not upgradeable.</td>
         </tr>
         <tr>
             <td>JTrancheBToken</td>
-            <td><code>7.24</code></td>
+            <td><code>6.84</code></td>
             <td>Tranche B token, with a floating price, making possible for holders to have a variable interest percentage. Not upgradeable.</td>
         </tr>
         <tr>
             <td>JTranchesDeployer</td>
-            <td><code>19.08</code></td>
+            <td><code>18.27</code></td>
             <td>Tranche A & B token deployer (implementation): this contract deploys tranche tokens everytime a new tranche is opened by the core protocol contract. Upgradeable.</td>
         </tr>
         <tr>
@@ -124,12 +124,12 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>19.11</code></td>
+            <td><code>18.96</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens. Upgradeable.</td>
         </tr>
         <tr>
             <td>JYearnStorage</td>
-            <td><code>1.96</code></td>
+            <td><code>1.81</code></td>
             <td>Core contract protocol (storage)</td>
         </tr>
         <tr>

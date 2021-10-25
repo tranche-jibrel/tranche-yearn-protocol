@@ -89,19 +89,4 @@ contract JTrancheAToken is Ownable, ERC20, AccessControl, IJTrancheTokens {
 		super._burn(msg.sender, value);
 	}
 
-	/**
-	 * @notice Emergency function to withdraw stuck tokens. It should be callable only by protocol
-	 * @param _token token address
-	 * @param _to receiver address
-	 * @param _amount token amount
-	 */
-	function emergencyTokenTransfer(address _token, address _to, uint256 _amount) public {
-		require(hasRole(MINTER_ROLE, msg.sender), "JTrancheA:  Caller is not authorized");
-        if(_token != address(0))
-			IERC20(_token).transfer(_to, _amount);
-		else {
-			bool sent = payable(_to).send(_amount);
-			require(sent, "Failed to send Ether");
-		}
-    }
 }
