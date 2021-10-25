@@ -31,26 +31,24 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
 
     function deployNewTrancheATokens(string memory _nameA, 
             string memory _symbolA, 
-            address _sender,
-            address _rewardToken) external override onlyProtocol returns (address) {
-        JTrancheAToken jTrancheA = new JTrancheAToken();
-        jTrancheA.initialize(_nameA, _symbolA);
-        jTrancheA.setJAaveMinter(msg.sender); 
-        jTrancheA.setRewardTokenAddress(_rewardToken);
-        jTrancheA.transferOwnership(_sender);
+            uint256 _trNum) external override onlyProtocol returns (address) {
+        JTrancheAToken jTrancheA = new JTrancheAToken(_nameA, _symbolA, _trNum);
+        jTrancheA.setJYearnMinter(msg.sender);
         return address(jTrancheA);
     }
 
     function deployNewTrancheBTokens(string memory _nameB, 
             string memory _symbolB, 
-            address _sender,
-            address _rewardToken) external override onlyProtocol returns (address) {
-        JTrancheBToken jTrancheB = new JTrancheBToken();
-        jTrancheB.initialize(_nameB, _symbolB);
-        jTrancheB.setJAaveMinter(msg.sender);
-        jTrancheB.setRewardTokenAddress(_rewardToken);
-        jTrancheB.transferOwnership(_sender);
+            uint256 _trNum) external override onlyProtocol returns (address) {
+        JTrancheBToken jTrancheB = new JTrancheBToken(_nameB, _symbolB, _trNum);
+        jTrancheB.setJYearnMinter(msg.sender);
         return address(jTrancheB);
+    }
+
+    function setNewJYearnTokens(address _newJYearn, address _trAToken, address _trBToken) external onlyOwner {
+        require((_newJYearn != address(0)) && (_trAToken != address(0)) && (_trBToken != address(0)), "TrancheDeployer: some address is not allowed");
+        JTrancheAToken(_trAToken).setJYearnMinter(_newJYearn);
+        JTrancheAToken(_trBToken).setJYearnMinter(_newJYearn);
     }
 
 }

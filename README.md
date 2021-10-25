@@ -38,7 +38,7 @@ or to test a single file:
 truffle run coverage --network development --file="<filename>"   
 ```
 
-Test coverage on JYearn contract: 94.27%
+Test coverage on JYearn contract: 94.32%
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
@@ -85,7 +85,7 @@ All values will be sent to new vault and tokens inside contract will be switched
         <tr>
             <td>JAdminTools</td>
             <td><code>2.27</code></td>
-            <td>Contract for administrative roles control (implementation), allowing the identification of addresses when dealing with reserved methods.</td>
+            <td>Contract for administrative roles control (implementation), allowing the identification of addresses when dealing with reserved methods. Upgradeable.</td>
         </tr>
         <tr>
             <td>JAdminToolsStorage</td>
@@ -93,19 +93,9 @@ All values will be sent to new vault and tokens inside contract will be switched
             <td>Contract for administrative roles control (storage)</td>
         </tr>
         <tr>
-            <td>JYearn</td>
-            <td><code>19.28</code></td>
-            <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens.</td>
-        </tr>
-        <tr>
-            <td>JYearnStorage</td>
-            <td><code>1.96</code></td>
-            <td>Core contract protocol (storage)</td>
-        </tr>
-        <tr>
             <td>JFeesCollector</td>
             <td><code>9.29</code></td>
-            <td>Fees collector and uniswap swapper (implementation), it changes all fees and extra tokens into new interests for token holders, sending back extra mount to Compound protocol contract</td>
+            <td>Fees collector and uniswap swapper (implementation), it changes all fees and extra tokens into new interests for token holders, sending back extra mount to Compound protocol contract. Upgradeable.</td>
         </tr>
         <tr>
             <td>JFeesCollectorStorage</td>
@@ -114,28 +104,18 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JTrancheAToken</td>
-            <td><code>8.95</code></td>
-            <td>Tranche A token (implementation), with a non decreasing price, making possible for holders to have a fixed interest percentage.</td>
-        </tr>
-        <tr>
-            <td>JTrancheATokenStorage</td>
-            <td><code>0.42</code></td>
-            <td>Tranche A token (storage)</td>
+            <td><code>7.24</code></td>
+            <td>Tranche A token, with a non decreasing price, making possible for holders to have a fixed interest percentage. Not upgradeable.</td>
         </tr>
         <tr>
             <td>JTrancheBToken</td>
-            <td><code>8.95</code></td>
-            <td>Tranche B token (implementation), with a floating price, making possible for holders to have a variable interest percentage.</td>
-        </tr>
-        <tr>
-            <td>JTrancheBTokenStorage</td>
-            <td><code>0.42</code></td>
-            <td>Tranche B token (storage)</td>
+            <td><code>7.24</code></td>
+            <td>Tranche B token, with a floating price, making possible for holders to have a variable interest percentage. Not upgradeable.</td>
         </tr>
         <tr>
             <td>JTranchesDeployer</td>
-            <td><code>20.29</code></td>
-            <td>Tranche A & B token deployer (implementation): this contract deploys tranche tokens everytime a new tranche is opened by the core protocol contract</td>
+            <td><code>19.08</code></td>
+            <td>Tranche A & B token deployer (implementation): this contract deploys tranche tokens everytime a new tranche is opened by the core protocol contract. Upgradeable.</td>
         </tr>
         <tr>
             <td>JTranchesDeployerStorage</td>
@@ -143,9 +123,19 @@ All values will be sent to new vault and tokens inside contract will be switched
             <td>Tranche A & B token deployer (storage)</td>
         </tr>
         <tr>
+            <td>JYearn</td>
+            <td><code>19.11</code></td>
+            <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens. Upgradeable.</td>
+        </tr>
+        <tr>
+            <td>JYearnStorage</td>
+            <td><code>1.96</code></td>
+            <td>Core contract protocol (storage)</td>
+        </tr>
+        <tr>
             <td>WETHGateway</td>
             <td><code>2.21</code></td>
-            <td>Ethereum gateway, useful when dealing with ethers and to have a simple contract to change ETH in WETH and viceversa</td>
+            <td>Ethereum gateway, useful when dealing with ethers and having a simple contract to change ETH in WETH and viceversa. Not upgradeable.</td>
         </tr>
     </tbody>
   </table>

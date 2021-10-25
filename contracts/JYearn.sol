@@ -30,19 +30,16 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _feesCollector fees collector contract address
      * @param _tranchesDepl tranches deployer contract address
      * @param _rewardsToken rewards token address (slice token address)
-     * @param _blocksPerYear blocks / year
      */
     function initialize(address _adminTools, 
             address _feesCollector, 
             address _tranchesDepl,
-            address _rewardsToken,
-            uint256 _blocksPerYear) external initializer() {
+            address _rewardsToken) external initializer() {
         OwnableUpgradeable.__Ownable_init();
         adminToolsAddress = _adminTools;
         feesCollectorAddress = _feesCollector;
         tranchesDeployerAddress = _tranchesDepl;
         redeemTimeout = 3; //default
-        totalBlocksPerYear = _blocksPerYear;
         rewardsToken = _rewardsToken;
     }
 
@@ -88,15 +85,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
 
     function getSirControllerAddress() external view override returns (address) {
         return incentivesControllerAddress;
-    }
-
-    /**
-     * @dev set how many blocks will be produced per year on the blockchain 
-     * @param _newValue new value
-     */
-    function setBlocksPerYear(uint256 _newValue) external onlyAdmins {
-        require(_newValue > 0, "JYearn: new value not allowed");
-        totalBlocksPerYear = _newValue;
     }
 
     /**
@@ -183,19 +171,23 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         trancheAddresses[tranchePairsCounter].yTokenAddress = _yTokenAddress;
         trancheAddresses[tranchePairsCounter].isVault = _isVault;
         trancheAddresses[tranchePairsCounter].ATrancheAddress = 
-                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, msg.sender, rewardsToken/*, tranchePairsCounter*/);
+                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheATokens(_nameA, _symbolA, /*msg.sender,*/ tranchePairsCounter);
         trancheAddresses[tranchePairsCounter].BTrancheAddress = 
-                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, msg.sender, rewardsToken/*, tranchePairsCounter*/); 
+                IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, /*msg.sender,*/ tranchePairsCounter); 
         
         trancheParameters[tranchePairsCounter].underlyingDecimals = _underlyingDec;
         trancheParameters[tranchePairsCounter].trancheAFixedPercentage = _fixedRpb;
-        trancheParameters[tranchePairsCounter].trancheALastActionBlock = block.number;
+        trancheParameters[tranchePairsCounter].trancheALastActionTime = block.timestamp;
 
         trancheParameters[tranchePairsCounter].storedTrancheAPrice = uint256(1e18);
 
-        trancheParameters[tranchePairsCounter].redemptionPercentage = 9950;  //default value 99.5%
+        trancheParameters[tranchePairsCounter].redemptionPercentage = 10000;  //default value 100%, no fees
 
-        calcRPBFromPercentage(tranchePairsCounter); // initialize tranche A RPB
+        // add tokens in adminTools contracts so they can change staking details
+        IJAdminTools(adminToolsAddress).addAdmin(trancheAddresses[tranchePairsCounter].ATrancheAddress);
+        IJAdminTools(adminToolsAddress).addAdmin(trancheAddresses[tranchePairsCounter].BTrancheAddress);
+
+        calcRPSFromPercentage(tranchePairsCounter); // initialize tranche A RPB
 
         emit TrancheAddedToProtocol(tranchePairsCounter, trancheAddresses[tranchePairsCounter].ATrancheAddress, trancheAddresses[tranchePairsCounter].BTrancheAddress);
 
@@ -250,11 +242,11 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @return tranche A token current price
      */
     function setTrancheAExchangeRate(uint256 _trancheNum) internal returns (uint256) {
-        calcRPBFromPercentage(_trancheNum);
-        uint256 deltaBlocks = (block.number).sub(trancheParameters[_trancheNum].trancheALastActionBlock);
-        uint256 deltaPrice = (trancheParameters[_trancheNum].trancheACurrentRPB).mul(deltaBlocks);
+        calcRPSFromPercentage(_trancheNum);
+        uint256 deltaTime = (block.timestamp).sub(trancheParameters[_trancheNum].trancheALastActionTime);
+        uint256 deltaPrice = (trancheParameters[_trancheNum].trancheACurrentRPS).mul(deltaTime);
         trancheParameters[_trancheNum].storedTrancheAPrice = (trancheParameters[_trancheNum].storedTrancheAPrice).add(deltaPrice);
-        trancheParameters[_trancheNum].trancheALastActionBlock = block.number;
+        trancheParameters[_trancheNum].trancheALastActionTime = block.timestamp;
         return trancheParameters[_trancheNum].storedTrancheAPrice;
     }
 
@@ -272,20 +264,20 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _trancheNum tranche number
      * @return RPB for a fixed percentage
      */
-    function getTrancheACurrentRPB(uint256 _trancheNum) external view returns (uint256) {
-        return trancheParameters[_trancheNum].trancheACurrentRPB;
+    function getTrancheACurrentRPS(uint256 _trancheNum) external view returns (uint256) {
+        return trancheParameters[_trancheNum].trancheACurrentRPS;
     }
 
     /**
-     * @dev get Tranche A exchange rate (tokens with 18 decimals)
+     * @dev get Tranche A exchange rate per seconds (tokens with 18 decimals)
      * @param _trancheNum tranche number
      * @return tranche A token current price
      */
-    function calcRPBFromPercentage(uint256 _trancheNum) public returns (uint256) {
+    function calcRPSFromPercentage(uint256 _trancheNum) public returns (uint256) {
         // if normalized price in tranche A price, everything should be scaled to 1e18 
-        trancheParameters[_trancheNum].trancheACurrentRPB = trancheParameters[_trancheNum].storedTrancheAPrice
-                        .mul(trancheParameters[_trancheNum].trancheAFixedPercentage).div(totalBlocksPerYear).div(1e18);
-        return trancheParameters[_trancheNum].trancheACurrentRPB;
+        trancheParameters[_trancheNum].trancheACurrentRPS = trancheParameters[_trancheNum].storedTrancheAPrice
+                        .mul(trancheParameters[_trancheNum].trancheAFixedPercentage).div(SECONDS_PER_YEAR).div(1e18);
+        return trancheParameters[_trancheNum].trancheACurrentRPS;
     }
 
     /**
@@ -575,7 +567,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         }
 
         uint256 feesAmount = normAmount.sub(userAmount);
-        if (diffBal > 0) {
+        if (diffBal > 0 && feesAmount > 0) {
             if (feesAmount <= diffBal)
                 SafeERC20Upgradeable.safeTransfer(IERC20Upgradeable(origToken), feesCollectorAddress, feesAmount);
             else
@@ -671,7 +663,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         }
 
         uint256 feesAmount = normAmount.sub(userAmount);
-        if (diffBal > 0) {
+        if (diffBal > 0 && feesAmount > 0) {
             if (feesAmount <= diffBal)
                 SafeERC20Upgradeable.safeTransfer(IERC20Upgradeable(origToken), feesCollectorAddress, feesAmount);
             else

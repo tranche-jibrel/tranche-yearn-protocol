@@ -129,13 +129,6 @@ contract("USDC JYearn", function(accounts) {
     console.log(usdcTrBContract.address);
   });
 
-  it('changing reward token address', async function () {
-    rewTok = await jYearnContract.rewardsToken()
-    // console.log(rewTok)
-    await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
-    await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
-  });
-
   // it("check if there are some USDC in unblocked account", async function () {
   //   console.log(await usdcContract.methods.balanceOf(UnBlockedAccount).call())
   // });
@@ -145,10 +138,10 @@ contract("USDC JYearn", function(accounts) {
     console.log("addresses tranche A: " + JSON.stringify(trAddresses, ["buyerCoinAddress", "yTokenAddress", "ATrancheAddress", "BTrancheAddress"]));
     trPar = await jYearnContract.trancheParameters(2);
     console.log("param tranche A: " + JSON.stringify(trPar, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPB", "underlyingDecimals"]));
-    tx = await jYearnContract.calcRPBFromPercentage(2, {from: user1});
+    tx = await jYearnContract.calcRPSFromPercentage(2, {from: user1});
 
     trPar = await jYearnContract.trancheParameters(2);
-    console.log("rpb tranche A: " + trPar[3].toString());
+    console.log("rps tranche A: " + trPar[3].toString());
     console.log("price tranche A: " + fromWei(trPar[2].toString()));
     trParams = await jYearnContract.trancheAddresses(2);
     expect(trParams.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
@@ -289,8 +282,6 @@ contract("USDC JYearn", function(accounts) {
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
       rewTok = await jYearnContract.rewardsToken()
-      await ethTrAContract.setRewardTokenAddress("0xc00e94cb662c3520282e6f5717214004a7f26888", {from: tokenOwner})
-      await ethTrAContract.setRewardTokenAddress(rewTok, {from: tokenOwner})
 
       await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
 
@@ -301,8 +292,6 @@ contract("USDC JYearn", function(accounts) {
 
       await jYearnContract.getTotalValue(1)
 
-      await jYearnContract.setBlocksPerYear(2102400)
-
       await jYearnContract.setDecimals(1, 18)
 
       await jYearnContract.setTrancheRedemptionPercentage(1, 50)
@@ -311,7 +300,7 @@ contract("USDC JYearn", function(accounts) {
 
       await jYearnContract.setTrancheAFixedPercentage(1, web3.utils.toWei("0.03", "ether"))
 
-      await jYearnContract.getTrancheACurrentRPB(1)
+      await jYearnContract.getTrancheACurrentRPS(1)
 
       await jYearnContract.setTrAStakingDetails(1, user1, 1, 0, 1634150567)
       await jYearnContract.getSingleTrancheUserStakeCounterTrA(user1, 1)

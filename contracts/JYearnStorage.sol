@@ -20,6 +20,7 @@ contract JYearnStorage is OwnableUpgradeable {
     address public constant ADAI_ADDRESS = 0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d;
 
     uint256 public constant PERCENT_DIVIDER = 10000;  // percentage divider
+    uint256 public constant SECONDS_PER_YEAR = 31557600;  // 60 sec * 60 min * 24 h * 365.25 d (leap years included)
 
     struct TrancheAddresses {
         address buyerCoinAddress;       // ETH (ETH_ADDR) or DAI or other supported tokens
@@ -31,9 +32,9 @@ contract JYearnStorage is OwnableUpgradeable {
 
     struct TrancheParameters {
         uint256 trancheAFixedPercentage;    // fixed percentage (i.e. 4% = 0.04 * 10^18 = 40000000000000000)
-        uint256 trancheALastActionBlock;
+        uint256 trancheALastActionTime;
         uint256 storedTrancheAPrice;
-        uint256 trancheACurrentRPB;
+        uint256 trancheACurrentRPS;
         uint16 redemptionPercentage;        // percentage with 2 decimals (divided by 10000, i.e. 95% is 9500)
         uint8 underlyingDecimals;
     }
@@ -44,7 +45,7 @@ contract JYearnStorage is OwnableUpgradeable {
     address public lendingPoolAddressProvider;
 
     uint256 public tranchePairsCounter;
-    uint256 public totalBlocksPerYear; 
+
     uint32 public redeemTimeout;
 
     mapping(uint256 => TrancheAddresses) public trancheAddresses;
