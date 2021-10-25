@@ -5,7 +5,6 @@ build/
 unused/
 dist/
 .openzeppelin/dev*.json
-.openzeppelin/unknown*.json
 *.txt
 coverage
 coverage.json
