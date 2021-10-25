@@ -84,6 +84,7 @@ contract JTrancheBToken is Ownable, ERC20, AccessControl, IJTrancheTokens {
 	 * @param value The amount that will be burnt.
 	 */
 	function burn(uint256 value) external override {
+		require(hasRole(MINTER_ROLE, msg.sender), "JTrancheB: caller cannot burn tokens");
 		require(value > 0, "JTrancheB: value is zero");
 		super._burn(msg.sender, value);
 	}

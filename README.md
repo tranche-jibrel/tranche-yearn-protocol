@@ -95,7 +95,7 @@ All values will be sent to new vault and tokens inside contract will be switched
         <tr>
             <td>JFeesCollector</td>
             <td><code>9.29</code></td>
-            <td>Fees collector and uniswap swapper (implementation), it changes all fees and extra tokens into new interests for token holders, sending back extra mount to Compound protocol contract. Upgradeable</td>
+            <td>Fees collector and uniswap swapper (implementation), it changes all fees and extra tokens into new interests for token holders, sending back extra mount to Compound protocol contract. Upgradeable.</td>
         </tr>
         <tr>
             <td>JFeesCollectorStorage</td>
@@ -104,18 +104,18 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JTrancheAToken</td>
-            <td><code>7.13</code></td>
+            <td><code>7.24</code></td>
             <td>Tranche A token, with a non decreasing price, making possible for holders to have a fixed interest percentage. Not upgradeable.</td>
         </tr>
         <tr>
             <td>JTrancheBToken</td>
-            <td><code>7.13</code></td>
+            <td><code>7.24</code></td>
             <td>Tranche B token, with a floating price, making possible for holders to have a variable interest percentage. Not upgradeable.</td>
         </tr>
         <tr>
             <td>JTranchesDeployer</td>
-            <td><code>19.46</code></td>
-            <td>Tranche A & B token deployer (implementation): this contract deploys tranche tokens everytime a new tranche is opened by the core protocol contract. Upgradeable</td>
+            <td><code>19.08</code></td>
+            <td>Tranche A & B token deployer (implementation): this contract deploys tranche tokens everytime a new tranche is opened by the core protocol contract. Upgradeable.</td>
         </tr>
         <tr>
             <td>JTranchesDeployerStorage</td>
@@ -135,7 +135,7 @@ All values will be sent to new vault and tokens inside contract will be switched
         <tr>
             <td>WETHGateway</td>
             <td><code>2.21</code></td>
-            <td>Ethereum gateway, useful when dealing with ethers and having a simple contract to change ETH in WETH and viceversa. Not Not upgradeable.</td>
+            <td>Ethereum gateway, useful when dealing with ethers and having a simple contract to change ETH in WETH and viceversa. Not upgradeable.</td>
         </tr>
     </tbody>
   </table>

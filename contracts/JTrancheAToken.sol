@@ -13,7 +13,6 @@ import "./interfaces/IIncentivesController.sol";
 contract JTrancheAToken is Ownable, ERC20, AccessControl, IJTrancheTokens {
 	using SafeMath for uint256;
 
-
 	bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 	address public jYearnAddress;
 	uint256 public protTrancheNum;
@@ -85,6 +84,7 @@ contract JTrancheAToken is Ownable, ERC20, AccessControl, IJTrancheTokens {
 	 * @param value The amount that will be burnt.
 	 */
 	function burn(uint256 value) external override {
+		require(hasRole(MINTER_ROLE, msg.sender), "JTrancheA: caller cannot burn tokens");
 		require(value > 0, "JTrancheA: value is zero");
 		super._burn(msg.sender, value);
 	}

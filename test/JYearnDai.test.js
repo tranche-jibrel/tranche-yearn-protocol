@@ -233,6 +233,13 @@ contract("DAI JYearn", function(accounts) {
     console.log("user2 stkDetails, startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   });
 
+  it('users cannot burn their tranche tokens', async function () {
+    await expectRevert(daiTrAContract.burn(toWei(1), {from: user1}), "JTrancheA: caller cannot burn tokens")
+    await expectRevert(daiTrAContract.burn(toWei(1), {from: user2}), "JTrancheA: caller cannot burn tokens")
+    await expectRevert(daiTrBContract.burn(toWei(1), {from: user1}), "JTrancheB: caller cannot burn tokens")
+    await expectRevert(daiTrBContract.burn(toWei(1), {from: user2}), "JTrancheB: caller cannot burn tokens")
+  })
+
   it('time passes...', async function () {
     let block = await web3.eth.getBlock("latest");
     console.log("Actual Block: " + block.number);
