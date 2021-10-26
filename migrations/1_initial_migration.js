@@ -88,7 +88,7 @@ module.exports = async (deployer, network, accounts) => {
     await JYInstance.setincentivesControllerAddress(JIController.address);
 
   } else if (network === 'ftm') {
-    let { ADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER, REWARD_TOKEN_ADDRESS,
+    let { JADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER, REWARD_TOKEN_ADDRESS,
       TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS,
       TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS } = process.env;
     const factoryOwner = accounts[0];
@@ -97,13 +97,11 @@ module.exports = async (deployer, network, accounts) => {
     let JFCinstance = null;
     let JTDeployerInstance = null;
 
-    if (!ADMIN_TOOLS) {
+    if (!JADMIN_TOOLS) {
       JATinstance = await deployProxy(JAdminTools, [], { from: factoryOwner });
       console.log('JADMIN_TOOLS=', JATinstance.address);
     } else {
-      JATinstance = {
-        address: ADMIN_TOOLS
-      }
+      JATinstance = await JAdminTools.at(JADMIN_TOOLS)
     }
 
     if (!FEE_COLLECTOR_ADDRESS) {
@@ -119,35 +117,32 @@ module.exports = async (deployer, network, accounts) => {
       JTDeployerInstance = await deployProxy(JTranchesDeployer, [], { from: factoryOwner });
       console.log('YEARN_DEPLOYER=', JTDeployerInstance.address);
     } else {
-      JTDeployerInstance = {
-        address: YEARN_DEPLOYER
-      }
+      JTDeployerInstance = await JTranchesDeployer.at(YEARN_DEPLOYER);
     }
 
     const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployerInstance.address, REWARD_TOKEN_ADDRESS], { from: factoryOwner });
     console.log('YEARN_TRANCHE_ADDRESS', JYInstance.address);
-
     await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
 
     await JTDeployerInstance.setJYearnAddress(JYInstance.address, { from: factoryOwner });
     console.log('yearn address set in deployer');
 
     await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, true, "jWFTMTrancheAToken",
-      "ayfWFTM", "jWFTMTrancheBToken", "byfWFTM", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
+      "ayfWFTM", "jWFTMTrancheBToken", "byfWFTM", web3.utils.toWei("0.00", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 1')
 
     await JYInstance.setTrancheDeposit(0, true, { from: factoryOwner });
     console.log('enable tranches')
 
     await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "jUSDCTrancheAToken", "ayfUSDC", "jUSDCTrancheAToken",
-      "byfUSDC", web3.utils.toWei("0.03", "ether"), 6, { from: factoryOwner });
+      "byfUSDC", web3.utils.toWei("0.00", "ether"), 6, { from: factoryOwner });
     console.log('added tranche 2')
 
     await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
     console.log('enable tranches')
 
     await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, true, "jDAITrancheAToken", "ayfDAI", "jDAITrancheAToken",
-      "byfDAI", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
+      "byfDAI", web3.utils.toWei("0.00", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 3')
 
     await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
