@@ -132,21 +132,21 @@ module.exports = async (deployer, network, accounts) => {
     await JTDeployerInstance.setJYearnAddress(JYInstance.address, { from: factoryOwner });
     console.log('yearn address set in deployer');
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, false, "jWFTMTrancheAToken",
+    await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, true, "jWFTMTrancheAToken",
       "ayfWFTM", "jWFTMTrancheBToken", "byfWFTM", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 1')
 
     await JYInstance.setTrancheDeposit(0, true, { from: factoryOwner });
     console.log('enable tranches')
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, false, "jUSDCTrancheAToken", "ayfUSDC", "jUSDCTrancheAToken",
+    await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "jUSDCTrancheAToken", "ayfUSDC", "jUSDCTrancheAToken",
       "byfUSDC", web3.utils.toWei("0.03", "ether"), 6, { from: factoryOwner });
     console.log('added tranche 2')
 
     await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
     console.log('enable tranches')
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, false, "jDAITrancheAToken", "ayfDAI", "jDAITrancheAToken",
+    await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, true, "jDAITrancheAToken", "ayfDAI", "jDAITrancheAToken",
       "byfDAI", web3.utils.toWei("0.03", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 3')
 
