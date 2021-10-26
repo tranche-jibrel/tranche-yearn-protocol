@@ -22,6 +22,7 @@ contract JYearnStorage is OwnableUpgradeable {
         address ATrancheAddress;
         address BTrancheAddress;
         bool isVault;                   // is yToken a vault or not
+        // uint8 tokenType;                // yToken = 0, vault = 1, cream = 2
     }
 
     struct TrancheParameters {
@@ -36,7 +37,6 @@ contract JYearnStorage is OwnableUpgradeable {
     address public adminToolsAddress;
     address public feesCollectorAddress;
     address public tranchesDeployerAddress;
-    address public lendingPoolAddressProvider;
 
     uint256 public tranchePairsCounter;
 

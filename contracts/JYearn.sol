@@ -168,7 +168,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             uint256 _fixedRpb, 
             uint8 _underlyingDec) external onlyAdmins nonReentrant {
         require(tranchesDeployerAddress != address(0), "JYearn: set tranche eth deployer");
-        // require(lendingPoolAddressProvider != address(0), "JYearn: set lending pool address provider");
 
         trancheAddresses[tranchePairsCounter].buyerCoinAddress = _buyerCoinAddress;
         trancheAddresses[tranchePairsCounter].yTokenAddress = _yTokenAddress;
@@ -502,7 +501,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     function buyTrancheAToken(uint256 _trancheNum, uint256 _amount) external payable nonReentrant {
         require(trancheDepositEnabled[_trancheNum], "JYearn: tranche deposit disabled");
         uint256 prevYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
-        // address lendingPool = ILendingPoolAddressesProvider(lendingPoolAddressProvider).getLendingPool();
         address _tokenAddr = trancheAddresses[_trancheNum].buyerCoinAddress;
         // check approve
         require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche A");
@@ -604,7 +602,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
         uint256 normAmount = _amount.mul(10 ** diffDec);
         uint256 tbAmount = normAmount.mul(1e18).div(getTrancheBExchangeRate(_trancheNum, _amount));
         uint256 prevYTokenBalance = getTokenBalance(trancheAddresses[_trancheNum].yTokenAddress);
-        // address lendingPool = ILendingPoolAddressesProvider(lendingPoolAddressProvider).getLendingPool();
         address _tokenAddr = trancheAddresses[_trancheNum].buyerCoinAddress;
         // check approve
         require(IERC20Upgradeable(_tokenAddr).allowance(msg.sender, address(this)) >= _amount, "JYearn: allowance failed buying tranche B");
