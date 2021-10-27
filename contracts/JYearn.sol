@@ -86,6 +86,20 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     }
 
     /**
+     * @dev set YFI token and rewards on the specific blockchain
+     * on Ethereum blockchain:
+     * YFI_TOKEN_ADDRESS = 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e;
+     * YFI_REWARDS_ADDRESS = 0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862;
+     * @param _yfiToken YFI token address
+     * @param _yfiRewards YFI rewards address
+     */
+    function setYFIAddresses(address _yfiToken, address _yfiRewards) external onlyAdmins {
+        require(_yfiToken != address(0) && _yfiRewards != address(0), "JYearn: not valid YFI addresses");
+        yfiTokenAddress = _yfiToken;
+        yfiRewardsAddress = _yfiRewards;
+    }
+
+    /**
      * @dev set decimals on the underlying token of a tranche
      * @param _trancheNum tranche number
      * @param _underlyingDec underlying token decimals
@@ -699,7 +713,8 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @return amount of unclaimed tokens
      */
     function getYFIUnclaimedRewardShares() public view returns(uint256) {
-        return IYearnRewards(YFI_REWARDS_ADDRESS).claimable(address(this));
+        require(yfiTokenAddress != address(0), "JYearn: not a valid YFI token address");
+        return IYearnRewards(yfiTokenAddress).claimable(address(this));
     }
 
     /**
@@ -707,10 +722,11 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _amount amount of YFI token to requested rewards on it
      */
     function claimYearnRewards(uint256 _amount) external {
-        uint256 yfiBalance = IERC20Upgradeable(YFI_TOKEN_ADDRESS).balanceOf(address(this));
+        require(yfiTokenAddress != address(0) && yfiRewardsAddress != address(0), "JYearn: not valid YFI addresses");
+        uint256 yfiBalance = IERC20Upgradeable(yfiTokenAddress).balanceOf(address(this));
         require(yfiBalance > 0, "JYearn: not enough YFI tokens to claim rewards");
 
-        IYearnRewards(YFI_REWARDS_ADDRESS).claim(_amount);
+        IYearnRewards(yfiRewardsAddress).claim(_amount);
     }
 
 }

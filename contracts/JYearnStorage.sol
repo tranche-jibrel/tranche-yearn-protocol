@@ -10,9 +10,6 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract JYearnStorage is OwnableUpgradeable {
 /* WARNING: NEVER RE-ORDER VARIABLES! Always double-check that new variables are added APPEND-ONLY. Re-ordering variables can permanently BREAK the deployed proxy contract.*/
-    address public constant YFI_TOKEN_ADDRESS = 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e;
-    address public constant YFI_REWARDS_ADDRESS = 0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862;
-
     uint256 public constant PERCENT_DIVIDER = 10000;  // percentage divider
     uint256 public constant SECONDS_PER_YEAR = 31557600;  // 60 sec * 60 min * 24 h * 365.25 d (leap years included)
 
@@ -37,6 +34,9 @@ contract JYearnStorage is OwnableUpgradeable {
     address public adminToolsAddress;
     address public feesCollectorAddress;
     address public tranchesDeployerAddress;
+
+    address public yfiTokenAddress;
+    address public yfiRewardsAddress;
 
     uint256 public tranchePairsCounter;
 
