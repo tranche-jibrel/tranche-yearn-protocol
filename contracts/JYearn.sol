@@ -29,18 +29,15 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @param _adminTools price oracle address
      * @param _feesCollector fees collector contract address
      * @param _tranchesDepl tranches deployer contract address
-     * @param _rewardsToken rewards token address (slice token address)
      */
     function initialize(address _adminTools, 
             address _feesCollector, 
-            address _tranchesDepl,
-            address _rewardsToken) external initializer() {
+            address _tranchesDepl) external initializer() {
         OwnableUpgradeable.__Ownable_init();
         adminToolsAddress = _adminTools;
         feesCollectorAddress = _feesCollector;
         tranchesDeployerAddress = _tranchesDepl;
         redeemTimeout = 3; //default
-        rewardsToken = _rewardsToken;
     }
 
     /**
@@ -66,13 +63,11 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      */
     function setNewEnvironment(address _adminTools, 
             address _feesCollector, 
-            address _tranchesDepl,
-            address _rewardsToken) external onlyOwner{
+            address _tranchesDepl) external onlyOwner{
         require((_adminTools != address(0)) && (_feesCollector != address(0)) && (_tranchesDepl != address(0)), "JYearn: check addresses");
         adminToolsAddress = _adminTools;
         feesCollectorAddress = _feesCollector;
         tranchesDeployerAddress = _tranchesDepl;
-        rewardsToken = _rewardsToken;
     }
 
     /**

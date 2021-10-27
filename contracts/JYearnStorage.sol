@@ -48,7 +48,6 @@ contract JYearnStorage is OwnableUpgradeable {
     mapping(address => uint256) public lastActivity;
     // enabling / disabling tranches for fund deposit
     mapping(uint256 => bool) public trancheDepositEnabled;
-    address public rewardsToken;  // slice rewards
 
     struct StakingDetails {
         uint256 startTime;
