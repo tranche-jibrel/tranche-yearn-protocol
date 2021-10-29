@@ -143,6 +143,7 @@ contract("USDC JYearn", function(accounts) {
     trPar = await jYearnContract.trancheParameters(2);
     console.log("rps tranche A: " + trPar[3].toString());
     console.log("price tranche A: " + fromWei(trPar[2].toString()));
+    console.log("yvUSDC price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(2)))
     trParams = await jYearnContract.trancheAddresses(2);
     expect(trParams.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
     expect(trParams.yTokenAddress).to.be.equal(yvUSDC_Address);
@@ -215,9 +216,11 @@ contract("USDC JYearn", function(accounts) {
     tot = await usdcTrAContract.totalSupply();
     console.log("trA tokens total: "+ fromWei(tot) + " ayUSDC");
     console.log("JYearn yUsdc balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
+    console.log("yvUSDC price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(2)))
     tx = await usdcTrAContract.approve(jYearnContract.address, bal, {from: user1});
     trPar = await jYearnContract.trancheParameters(2);
     console.log("TrA price: " + fromWei(trPar[2].toString()));
+
     tx = await jYearnContract.redeemTrancheAToken(2, bal, {from: user1});
     newBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
     console.log("User1 New Usdc balance: "+ newBal + " USDC");
@@ -251,6 +254,7 @@ contract("USDC JYearn", function(accounts) {
     tx = await usdcTrBContract.approve(jYearnContract.address, bal, {from: user1});
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2, 0)));
     console.log("TrB value: " +  fromWei6Dec(await jYearnContract.getTrBValue(2)));
+
     tx = await jYearnContract.redeemTrancheBToken(2, bal, {from: user1});
     newBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
     console.log("User1 New Usdc balance: "+ newBal + " USDC");

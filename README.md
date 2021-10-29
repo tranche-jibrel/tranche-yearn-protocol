@@ -2,7 +2,7 @@
 
 <img src="https://gblobscdn.gitbook.com/spaces%2F-MP969WsfbfQJJFgxp2K%2Favatar-1617981494187.png?alt=media" alt="Tranche Logo" width="100">
 
-Yearn Tranche is a decentralized protocol for managing risk and maximizing returns. The protocol integrates with Yearn's yTokens, to create two new interest-bearing instruments, one with a fixed-rate, Tranche A, and one with a variable rate, Tranche B. 
+Yearn Tranche is a decentralized protocol for managing risk and maximizing returns. The protocol integrates with Yearn's yTokens and yVaults, to create two new interest-bearing instruments, one with a fixed-rate, Tranche A, and one with a variable rate, Tranche B. 
 
 Info URL: https://docs.tranche.finance/tranchefinance/
 
@@ -38,7 +38,7 @@ or to test a single file:
 truffle run coverage --network development --file="<filename>"   
 ```
 
-Test coverage on JYearn contract: 94.32%
+Test coverage on JYearn contract: 94.41%
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
@@ -124,7 +124,7 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>19.38</code></td>
+            <td><code>19.48</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens. Upgradeable.</td>
         </tr>
         <tr>
