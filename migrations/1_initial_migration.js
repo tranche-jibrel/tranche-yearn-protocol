@@ -44,8 +44,7 @@ module.exports = async (deployer, network, accounts) => {
     const JTDeployer = await deployProxy(JTranchesDeployer, [], { from: factoryOwner });
     console.log("Tranches Deployer: " + JTDeployer.address);
 
-    const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address,
-    JTDeployer.address, mySLICEinstance.address], { from: factoryOwner });
+    const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployer.address], { from: factoryOwner });
     console.log('JYearn Deployed: ', JYInstance.address);
 
     await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
@@ -83,12 +82,12 @@ module.exports = async (deployer, network, accounts) => {
     await JYInstance.setTrancheDeposit(2, true);
 
     const JIController = await deployProxy(IncentivesController, [], { from: factoryOwner });
-    console.log("Tranches Deployer: " + JIController.address);
+    console.log("Incentive Controller mock: " + JIController.address);
 
     await JYInstance.setincentivesControllerAddress(JIController.address);
 
   } else if (network === 'ftm') {
-    let { JADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER, REWARD_TOKEN_ADDRESS,
+    let { JADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER,
       TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS,
       TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS } = process.env;
     const factoryOwner = accounts[0];
@@ -120,7 +119,7 @@ module.exports = async (deployer, network, accounts) => {
       JTDeployerInstance = await JTranchesDeployer.at(YEARN_DEPLOYER);
     }
 
-    const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployerInstance.address, REWARD_TOKEN_ADDRESS], { from: factoryOwner });
+    const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployerInstance.address], { from: factoryOwner });
     console.log('YEARN_TRANCHE_ADDRESS', JYInstance.address);
     await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
 

@@ -143,6 +143,7 @@ contract("USDC JYearn", function(accounts) {
     trPar = await jYearnContract.trancheParameters(2);
     console.log("rps tranche A: " + trPar[3].toString());
     console.log("price tranche A: " + fromWei(trPar[2].toString()));
+    console.log("yvUSDC price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(2)))
     trParams = await jYearnContract.trancheAddresses(2);
     expect(trParams.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
     expect(trParams.yTokenAddress).to.be.equal(yvUSDC_Address);
@@ -215,9 +216,11 @@ contract("USDC JYearn", function(accounts) {
     tot = await usdcTrAContract.totalSupply();
     console.log("trA tokens total: "+ fromWei(tot) + " ayUSDC");
     console.log("JYearn yUsdc balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
+    console.log("yvUSDC price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(2)))
     tx = await usdcTrAContract.approve(jYearnContract.address, bal, {from: user1});
     trPar = await jYearnContract.trancheParameters(2);
     console.log("TrA price: " + fromWei(trPar[2].toString()));
+
     tx = await jYearnContract.redeemTrancheAToken(2, bal, {from: user1});
     newBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
     console.log("User1 New Usdc balance: "+ newBal + " USDC");
@@ -251,6 +254,7 @@ contract("USDC JYearn", function(accounts) {
     tx = await usdcTrBContract.approve(jYearnContract.address, bal, {from: user1});
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2, 0)));
     console.log("TrB value: " +  fromWei6Dec(await jYearnContract.getTrBValue(2)));
+
     tx = await jYearnContract.redeemTrancheBToken(2, bal, {from: user1});
     newBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
     console.log("User1 New Usdc balance: "+ newBal + " USDC");
@@ -269,9 +273,7 @@ contract("USDC JYearn", function(accounts) {
 
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
-      rewTok = await jYearnContract.rewardsToken()
-
-      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
+      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, {from: tokenOwner})
 
       await jYearnContract.setNewYToken(0, "0xc00e94cb662c3520282e6f5717214004a7f26888", false, {from: tokenOwner})
       await jYearnContract.setNewYToken(0, yWETH_Address, false, {from: tokenOwner})
@@ -298,7 +300,11 @@ contract("USDC JYearn", function(accounts) {
       await jYearnContract.getSingleTrancheUserStakeCounterTrB(user1, 1)
       await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrB(user1, 1, 1)
 
-      await jYearnContract.transferTokenToFeesCollector(rewTok, 0)
+      await jYearnContract.transferTokenToFeesCollector(USDC_ADDRESS, 0)
+
+      const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e';
+      const YFI_REWARDS_ADDRESS = '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862';
+      await jYearnContract.setYFIAddresses(YFI_TOKEN_ADDRESS, YFI_REWARDS_ADDRESS)
 
       await jYearnContract.getYFIUnclaimedRewardShares()
       await expectRevert(jYearnContract.claimYearnRewards(10), "JYearn: not enough YFI tokens to claim rewards")

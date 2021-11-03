@@ -281,9 +281,7 @@ contract("USDC JYearn", function(accounts) {
 
   describe('higher percentage for test coverage', function() {
     it('calling unfrequently functions', async function () {
-      rewTok = await jYearnContract.rewardsToken()
-
-      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, rewTok, {from: tokenOwner})
+      await jYearnContract.setNewEnvironment(jATContract.address, jFCContract.address, jTrDeplContract.address, {from: tokenOwner})
 
       await jYearnContract.setNewYToken(0, "0xc00e94cb662c3520282e6f5717214004a7f26888", false, {from: tokenOwner})
       await jYearnContract.setNewYToken(0, yWETH_Address, false, {from: tokenOwner})
@@ -310,7 +308,11 @@ contract("USDC JYearn", function(accounts) {
       await jYearnContract.getSingleTrancheUserStakeCounterTrB(user1, 1)
       await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrB(user1, 1, 1)
 
-      await jYearnContract.transferTokenToFeesCollector(rewTok, 0)
+      await jYearnContract.transferTokenToFeesCollector(USDC_ADDRESS, 0)
+
+      const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e';
+      const YFI_REWARDS_ADDRESS = '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862';
+      await jYearnContract.setYFIAddresses(YFI_TOKEN_ADDRESS, YFI_REWARDS_ADDRESS)
 
       await jYearnContract.getYFIUnclaimedRewardShares()
       await expectRevert(jYearnContract.claimYearnRewards(10), "JYearn: not enough YFI tokens to claim rewards")
