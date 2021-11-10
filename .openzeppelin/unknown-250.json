@@ -39,6 +39,16 @@
       "address": "0x85AE2074B76bf0eDAc3eA60B6F36434977136Ff0",
       "txHash": "0x31d38cba8e1d0c4eb6aa641f97d601cc8d17ddaef8a60aa6c85e33f657be484f",
       "kind": "transparent"
+    },
+    {
+      "address": "0x2896D1850D298c6C7676B924e70D7313552A8e21",
+      "txHash": "0xcfaefd6553a611c5e57a197ac034066dbd987e15652194d75fef2a2374bc4595",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x45055e82Fe3dc322a81a50b4a973c26de9B4D35c",
+      "txHash": "0xd9af81d0e44b081711edfa15e3a4735e7f584226ab5383e4b180246337a67e25",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -865,6 +875,67 @@
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "f8a22bb2dc9977da7124ebf179fea1e7816580fc2764a73098df139c0c3b3e9d": {
+      "address": "0x2fD0740ea743c8Ec3534fCf64A308A68f4C3B2B1",
+      "txHash": "0xeeb54493af652bf6dc533aeeb406148fa9e347d74232f736bd30065bc7fb2be1",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
+          },
+          {
+            "contract": "JTranchesDeployerStorage",
+            "label": "jYearnAddress",
+            "type": "t_address",
+            "src": "JTranchesDeployerStorage.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
           }
         }
       }

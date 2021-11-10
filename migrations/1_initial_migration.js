@@ -89,7 +89,7 @@ module.exports = async (deployer, network, accounts) => {
   } else if (network === 'ftm') {
     let { JADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER,
       TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS,
-      TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS } = process.env;
+      TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, MOCK_INCENTIVE_CONTROLLER } = process.env;
     const factoryOwner = accounts[0];
 
     let JATinstance = null;
@@ -148,6 +148,16 @@ module.exports = async (deployer, network, accounts) => {
     await JYInstance.setTrancheDeposit(2, true, { from: factoryOwner });
     console.log('enable tranches')
 
+    if (!MOCK_INCENTIVE_CONTROLLER) {
+      const JIController = await deployProxy(IncentivesController, [], { from: factoryOwner });
+      console.log("MOCK_INCENTIVE_CONTROLLER " + JIController.address);
+      await JYInstance.setincentivesControllerAddress(JIController.address);
+      console.log('incentive controller setup')
+    } else {
+      await JYInstance.setincentivesControllerAddress(MOCK_INCENTIVE_CONTROLLER);
+      console.log('incentive controller setup')
+    }
+
     trParams = await JYInstance.trancheAddresses(0);
     let ftmTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
     let ftmTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
@@ -160,11 +170,8 @@ module.exports = async (deployer, network, accounts) => {
     let DAITrB = await JTrancheBToken.at(trParams.BTrancheAddress);
 
     console.log(`REACT_APP_YEARN_TRANCHE_TOKENS=${ftmTrA.address},${ftmTrB.address},${USDCTrA.address},${USDCTrB.address},${DAITrA.address},${DAITrB.address}`);
+    console.log(`TRANCHE_A=${ftmTrA.address},${USDCTrA.address},${DAITrA.address}`);
+    console.log(`TRANCHE_B=${ftmTrB.address},${USDCTrB.address},${DAITrB.address}`);
 
-    const JIController = await deployProxy(IncentivesController, [], { from: factoryOwner });
-    console.log("MOCK_INCENTIVE_CONTROLLER " + JIController.address);
-
-    await JYInstance.setincentivesControllerAddress(JIController.address);
-    console.log('incentive controller setup')
   }
 }
