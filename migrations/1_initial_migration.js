@@ -126,25 +126,26 @@ module.exports = async (deployer, network, accounts) => {
     await JTDeployerInstance.setJYearnAddress(JYInstance.address, { from: factoryOwner });
     console.log('yearn address set in deployer');
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, true, "jWFTMTrancheAToken",
-      "ayfWFTM", "jWFTMTrancheBToken", "byfWFTM", web3.utils.toWei("0.00", "ether"), 18, { from: factoryOwner });
+    await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, true, "Tranche A - Yearn WFTM",
+      "ayfWFTM", "Tranche B - Yearn WFTM", "byfWFTM", web3.utils.toWei("0.00", "ether"), 18, { from: factoryOwner });
+
     console.log('added tranche 1')
 
     await JYInstance.setTrancheDeposit(0, true, { from: factoryOwner });
     console.log('enable tranches')
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "jUSDCTrancheAToken", "ayfUSDC", "jUSDCTrancheAToken",
+    await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "Tranche A - Yearn USDC", "ayfUSDC", "Tranche B - Yearn USDC",
       "byfUSDC", web3.utils.toWei("0.00", "ether"), 6, { from: factoryOwner });
     console.log('added tranche 2')
 
     await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
     console.log('enable tranches')
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, true, "jDAITrancheAToken", "ayfDAI", "jDAITrancheAToken",
+    await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, true, "Tranche A - Yearn DAI", "ayfDAI", "Tranche B - Yearn DAI",
       "byfDAI", web3.utils.toWei("0.00", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 3')
 
-    await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
+    await JYInstance.setTrancheDeposit(2, true, { from: factoryOwner });
     console.log('enable tranches')
 
     trParams = await JYInstance.trancheAddresses(0);

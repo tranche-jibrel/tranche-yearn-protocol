@@ -34,6 +34,11 @@
       "address": "0x74A037d5d9E1De67b5bfa87cc013E8Ff220Ea011",
       "txHash": "0x2cb9537b5c7a72d3303e07c05a762a2381743bcdd39ceeb8866603c8ba7fee91",
       "kind": "transparent"
+    },
+    {
+      "address": "0x85AE2074B76bf0eDAc3eA60B6F36434977136Ff0",
+      "txHash": "0x31d38cba8e1d0c4eb6aa641f97d601cc8d17ddaef8a60aa6c85e33f657be484f",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -594,6 +599,272 @@
           },
           "t_bool": {
             "label": "bool"
+          }
+        }
+      }
+    },
+    "d63171396956ddb1638c7996170e40f14d25ee5e1929a126354ab37bb7edcdfd": {
+      "address": "0x53c3b8845903446FF015632B7917ecAA623395eC",
+      "txHash": "0x00ba671e7ed03a29c8819185de2974b72975bfd03ef48640697c65cd3a10ea77",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "_status",
+            "type": "t_uint256",
+            "src": "../@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:37"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:67"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "adminToolsAddress",
+            "type": "t_address",
+            "src": "JYearnStorage.sol:34"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "feesCollectorAddress",
+            "type": "t_address",
+            "src": "JYearnStorage.sol:35"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "tranchesDeployerAddress",
+            "type": "t_address",
+            "src": "JYearnStorage.sol:36"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "yfiTokenAddress",
+            "type": "t_address",
+            "src": "JYearnStorage.sol:38"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "yfiRewardsAddress",
+            "type": "t_address",
+            "src": "JYearnStorage.sol:39"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "tranchePairsCounter",
+            "type": "t_uint256",
+            "src": "JYearnStorage.sol:41"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "redeemTimeout",
+            "type": "t_uint32",
+            "src": "JYearnStorage.sol:43"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "trancheAddresses",
+            "type": "t_mapping(t_uint256,t_struct(TrancheAddresses)4514_storage)",
+            "src": "JYearnStorage.sol:45"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "trancheParameters",
+            "type": "t_mapping(t_uint256,t_struct(TrancheParameters)4527_storage)",
+            "src": "JYearnStorage.sol:46"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "lastActivity",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "JYearnStorage.sol:48"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "trancheDepositEnabled",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "src": "JYearnStorage.sol:50"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "incentivesControllerAddress",
+            "type": "t_address",
+            "src": "JYearnStorage.sol:57"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "stakeCounterTrA",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
+            "src": "JYearnStorage.sol:60"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "stakeCounterTrB",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
+            "src": "JYearnStorage.sol:61"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "stakingDetailsTrancheA",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)))",
+            "src": "JYearnStorage.sol:63"
+          },
+          {
+            "contract": "JYearnStorage",
+            "label": "stakingDetailsTrancheB",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)))",
+            "src": "JYearnStorage.sol:64"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_uint256,t_struct(TrancheAddresses)4514_storage)": {
+            "label": "mapping(uint256 => struct JYearnStorage.TrancheAddresses)"
+          },
+          "t_struct(TrancheAddresses)4514_storage": {
+            "label": "struct JYearnStorage.TrancheAddresses",
+            "members": [
+              {
+                "label": "buyerCoinAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "yTokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "ATrancheAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "BTrancheAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "isVault",
+                "type": "t_bool"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_uint256,t_struct(TrancheParameters)4527_storage)": {
+            "label": "mapping(uint256 => struct JYearnStorage.TrancheParameters)"
+          },
+          "t_struct(TrancheParameters)4527_storage": {
+            "label": "struct JYearnStorage.TrancheParameters",
+            "members": [
+              {
+                "label": "trancheAFixedPercentage",
+                "type": "t_uint256"
+              },
+              {
+                "label": "trancheALastActionTime",
+                "type": "t_uint256"
+              },
+              {
+                "label": "storedTrancheAPrice",
+                "type": "t_uint256"
+              },
+              {
+                "label": "trancheACurrentRPS",
+                "type": "t_uint256"
+              },
+              {
+                "label": "redemptionPercentage",
+                "type": "t_uint16"
+              },
+              {
+                "label": "underlyingDecimals",
+                "type": "t_uint8"
+              }
+            ]
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
+            "label": "mapping(address => mapping(uint256 => uint256))"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)))": {
+            "label": "mapping(address => mapping(uint256 => mapping(uint256 => struct JYearnStorage.StakingDetails)))"
+          },
+          "t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage))": {
+            "label": "mapping(uint256 => mapping(uint256 => struct JYearnStorage.StakingDetails))"
+          },
+          "t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)": {
+            "label": "mapping(uint256 => struct JYearnStorage.StakingDetails)"
+          },
+          "t_struct(StakingDetails)4564_storage": {
+            "label": "struct JYearnStorage.StakingDetails",
+            "members": [
+              {
+                "label": "startTime",
+                "type": "t_uint256"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
           }
         }
       }
