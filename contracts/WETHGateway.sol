@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -11,13 +10,12 @@ import "./TransferETHHelper.sol";
 contract WETHGateway is IWETHGateway, Ownable {
 
   IWETH internal immutable WETH;
-  address internal jYearnAddress;
 
   /**
    * @dev Sets the WETH address and the jAave contract address. Infinite approves lending pool.
    * @param _weth Address of the Wrapped Ether contract
    **/
-  constructor(address _weth/*, address _jYearnAddress*/) {
+  constructor(address _weth) {
     WETH = IWETH(_weth);
   }
 

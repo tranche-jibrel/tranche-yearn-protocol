@@ -5,7 +5,7 @@
  * @author: Jibrel Team
  */
 pragma solidity ^0.8.0;
-pragma experimental ABIEncoderV2; // needed for getAllAtokens and getAllReservesTokens
+
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
@@ -222,7 +222,6 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     function yearnDeposit(uint256 _trNum, uint256 _amount) internal {
         address origToken = trancheAddresses[_trNum].buyerCoinAddress;
         address yToken = trancheAddresses[_trNum].yTokenAddress;
-        require(_amount <= IERC20Upgradeable(origToken).balanceOf(msg.sender), "Insufficient Balance");
 
         IERC20Upgradeable(origToken).approve(yToken, _amount);
 

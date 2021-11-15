@@ -5,7 +5,6 @@
  * @author: Jibrel Team
  */
 pragma solidity ^0.8.0;
-pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "./interfaces/IJAdminTools.sol";
