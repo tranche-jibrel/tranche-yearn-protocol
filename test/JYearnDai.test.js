@@ -152,7 +152,7 @@ contract("DAI JYearn", function(accounts) {
 
     tx = await daiContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
 
-    tx = await jYearnContract.buyTrancheAToken(1, toWei(10), {from: user1});
+    tx = await jYearnContract.buyTrancheAToken(1, toWei(60), {from: user1});
 
     console.log("user1 New DAI balance: " + fromWei(await daiContract.methods.balanceOf(user1).call()) + " DAI");
     console.log("user1 trA tokens: " + fromWei(await daiTrAContract.balanceOf(user1)) + " ayDAI");
