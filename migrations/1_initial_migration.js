@@ -89,7 +89,10 @@ module.exports = async (deployer, network, accounts) => {
   } else if (network === 'ftm') {
     let { JADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER,
       TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS,
-      TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, MOCK_INCENTIVE_CONTROLLER } = process.env;
+      TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, MOCK_INCENTIVE_CONTROLLER,
+      TRANCHE_FOUR_TOKEN_ADDRESS, TRANCHE_FOUR_CTOKEN_ADDRESS, TRANCHE_FIVE_TOKEN_ADDRESS, TRANCHE_FIVE_CTOKEN_ADDRESS
+    } = process.env;
+
     const factoryOwner = accounts[0];
 
     let JATinstance = null;
@@ -126,27 +129,43 @@ module.exports = async (deployer, network, accounts) => {
     await JTDeployerInstance.setJYearnAddress(JYInstance.address, { from: factoryOwner });
     console.log('yearn address set in deployer');
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, true, "Tranche A - Yearn WFTM",
-      "ayvWFTM", "Tranche B - Yearn WFTM", "byvWFTM", web3.utils.toWei("0.0272", "ether"), 18, { from: factoryOwner });
 
-    console.log('added tranche 1')
+    await JYInstance.addTrancheToProtocol(TRANCHE_ONE_TOKEN_ADDRESS, TRANCHE_ONE_CTOKEN_ADDRESS, true, "Tranche A - Yearn DAI", "ayvDAI", "Tranche B - Yearn DAI",
+      "byvDAI", web3.utils.toWei("0.01825", "ether"), 18, { from: factoryOwner });
+    console.log('added tranche 0')
 
     await JYInstance.setTrancheDeposit(0, true, { from: factoryOwner });
-    console.log('enable tranches')
+    console.log('enable tranches 0')
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "Tranche A - Yearn USDC", "ayvUSDC", "Tranche B - Yearn USDC",
+    await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "Tranche A - Yearn MIM", "ayvMIM", "Tranche B - Yearn MIM",
+      "byvMIM", web3.utils.toWei("0.008345", "ether"), 6, { from: factoryOwner });
+    console.log('added tranche 1')
+
+    await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
+    console.log('enable tranches 1')
+
+    await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, true, "Tranche A - Yearn USDC", "ayvUSDC", "Tranche B - Yearn USDC",
       "byvUSDC", web3.utils.toWei("0.008929", "ether"), 6, { from: factoryOwner });
     console.log('added tranche 2')
 
-    await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
-    console.log('enable tranches')
+    await JYInstance.setTrancheDeposit(2, true, { from: factoryOwner });
+    console.log('enable tranches 2')
 
-    await JYInstance.addTrancheToProtocol(TRANCHE_THREE_TOKEN_ADDRESS, TRANCHE_THREE_CTOKEN_ADDRESS, true, "Tranche A - Yearn DAI", "ayvDAI", "Tranche B - Yearn DAI",
-      "byvDAI", web3.utils.toWei("0.01825", "ether"), 18, { from: factoryOwner });
+
+    await JYInstance.addTrancheToProtocol(TRANCHE_FOUR_TOKEN_ADDRESS, TRANCHE_FOUR_CTOKEN_ADDRESS, true, "Tranche A - Yearn WFTM", "ayvWFTM", "Tranche B - Yearn WFTM",
+      "byvWFTM", web3.utils.toWei("0.02720", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 3')
 
-    await JYInstance.setTrancheDeposit(2, true, { from: factoryOwner });
-    console.log('enable tranches')
+    await JYInstance.setTrancheDeposit(3, true, { from: factoryOwner });
+    console.log('enable tranches 3')
+
+
+    await JYInstance.addTrancheToProtocol(TRANCHE_FIVE_TOKEN_ADDRESS, TRANCHE_FIVE_CTOKEN_ADDRESS, true, "Tranche A - Yearn YFI", "ayvYFI", "Tranche B - Yearn YFI",
+      "byvYFI", web3.utils.toWei("0.00", "ether"), 18, { from: factoryOwner });
+    console.log('added tranche 4')
+
+    await JYInstance.setTrancheDeposit(4, true, { from: factoryOwner });
+    console.log('enable tranches 4')
 
     if (!MOCK_INCENTIVE_CONTROLLER) {
       const JIController = await deployProxy(IncentivesController, [], { from: factoryOwner });
@@ -159,19 +178,28 @@ module.exports = async (deployer, network, accounts) => {
     }
 
     trParams = await JYInstance.trancheAddresses(0);
-    let ftmTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
-    let ftmTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
+    let daiTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
+    let daiTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
     trParams = await JYInstance.trancheAddresses(1);
-    let USDCTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
-    let USDCTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
+    let mimTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
+    let mimTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
 
     trParams = await JYInstance.trancheAddresses(2);
-    let DAITrA = await JTrancheAToken.at(trParams.ATrancheAddress);
-    let DAITrB = await JTrancheBToken.at(trParams.BTrancheAddress);
+    let usdcTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
+    let usdcTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
 
-    console.log(`REACT_APP_YEARN_TRANCHE_TOKENS=${ftmTrA.address},${ftmTrB.address},${USDCTrA.address},${USDCTrB.address},${DAITrA.address},${DAITrB.address}`);
-    console.log(`TRANCHE_A=${ftmTrA.address},${USDCTrA.address},${DAITrA.address}`);
-    console.log(`TRANCHE_B=${ftmTrB.address},${USDCTrB.address},${DAITrB.address}`);
+    trParams = await JYInstance.trancheAddresses(3);
+    let ftmTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
+    let ftmTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
+
+    trParams = await JYInstance.trancheAddresses(4);
+    let yfiTrA = await JTrancheAToken.at(trParams.ATrancheAddress);
+    let yfiTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
+
+    console.log(`REACT_APP_YEARN_TRANCHE_TOKENS=${daiTrA.address},${daiTrB.address},${yfiTrA.address},${yfiTrB.address},
+    ${mimTrA.address},${mimTrB.address},${usdcTrA.address},${usdcTrB.address},${ftmTrA.address},,${ftmTrB.address}`);
+    console.log(`TRANCHE_A=${daiTrA.address},${mimTrA.address},${usdcTrA.address},${ftmTrA.address},${yfiTrA.address}`);
+    console.log(`TRANCHE_B=${daiTrB.address},${mimTrB.address},${usdcTrB.address},${ftmTrB.address},${yfiTrB.address}`);
 
   }
 }
