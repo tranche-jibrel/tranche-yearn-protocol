@@ -138,7 +138,7 @@ module.exports = async (deployer, network, accounts) => {
     console.log('enable tranches 0')
 
     await JYInstance.addTrancheToProtocol(TRANCHE_TWO_TOKEN_ADDRESS, TRANCHE_TWO_CTOKEN_ADDRESS, true, "Tranche A - Yearn MIM", "ayvMIM", "Tranche B - Yearn MIM",
-      "byvMIM", web3.utils.toWei("0.008345", "ether"), 6, { from: factoryOwner });
+      "byvMIM", web3.utils.toWei("0.008345", "ether"), 18, { from: factoryOwner });
     console.log('added tranche 1')
 
     await JYInstance.setTrancheDeposit(1, true, { from: factoryOwner });
@@ -197,7 +197,7 @@ module.exports = async (deployer, network, accounts) => {
     let yfiTrB = await JTrancheBToken.at(trParams.BTrancheAddress);
 
     console.log(`REACT_APP_YEARN_TRANCHE_TOKENS=${daiTrA.address},${daiTrB.address},${yfiTrA.address},${yfiTrB.address},
-    ${mimTrA.address},${mimTrB.address},${usdcTrA.address},${usdcTrB.address},${ftmTrA.address},,${ftmTrB.address}`);
+    ${mimTrA.address},${mimTrB.address},${usdcTrA.address},${usdcTrB.address},${ftmTrA.address},${ftmTrB.address}`);
     console.log(`TRANCHE_A=${daiTrA.address},${mimTrA.address},${usdcTrA.address},${ftmTrA.address},${yfiTrA.address}`);
     console.log(`TRANCHE_B=${daiTrB.address},${mimTrB.address},${usdcTrB.address},${ftmTrB.address},${yfiTrB.address}`);
 
