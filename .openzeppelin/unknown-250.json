@@ -1,70 +1,40 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0xD7F19Ed4DAa3f3117dD001B6254C265e45178d33",
-    "txHash": "0xe58579f9c6125454343b4616e8326cc33eaf9e36f0238cd0d7e7d001ebf82ca1"
+    "address": "0xb899aF7b891795b95d66A3C770Ac35F0db6e2888",
+    "txHash": "0xcfa25e9fa59337093e6f7793b09c620674627f2b54c8fe71e32a900404a2527f"
   },
   "proxies": [
     {
-      "address": "0x91ebefCaA7D37f9Ddb0E70a2C15F605B39B5aAaB",
-      "txHash": "0x4adf20d7f9e75ef4b6458b38ab710ebc7051f045c4488300145ea0d8e489c04a",
+      "address": "0xd4165C55287A9f34479d2Feb30D0723a5556946C",
+      "txHash": "0x584ac2b1757581ac6590522068090abeae40e8582b7b00cca27b5bc0f1d5e1fd",
       "kind": "transparent"
     },
     {
-      "address": "0x04D5B281539DC3C82728B786048662d07F656436",
-      "txHash": "0xece71d0e12bd101c13d389f12fab172a9033bd1ebf346a333e81e3543a2fa6d0",
+      "address": "0x8C082809DEF6a3c1742D84553B9C6FF1DBC161C8",
+      "txHash": "0xe933ee69aa85986497ec522a355925c51ea1f4a2e5524c0eb0d1ae73bd959c71",
       "kind": "transparent"
     },
     {
-      "address": "0x76DC4d9233437F1F628CB50c7c7D3324c492622d",
-      "txHash": "0x879a99fb7d3106386bbfae5d08816305b86625cbad741aba563c24ba91bf1212",
+      "address": "0x566FB3Abc63eD4D1C15550C63674D404337FC9E5",
+      "txHash": "0xb947542330dbc57280d1b52f16ddafdc16c15ecbc0d96444589e84131209175d",
       "kind": "transparent"
     },
     {
-      "address": "0x87c740fA97064890A432DCF6Ffb089d13B605CCE",
-      "txHash": "0xb2ed14609dbf275957f6efe605eb0119986efcc7bf504f9ba56183f995da0ccb",
+      "address": "0xe572401aFa7405Ea8EBf657D2b2Ed0Bce0bCf288",
+      "txHash": "0x04d0f2b5963f388d9c25fc372e64b793d0579e7931dc60a950b8efebdd788c92",
       "kind": "transparent"
     },
     {
-      "address": "0xf0A5A3C957730C23FCFDB93b74DB9A5692397987",
-      "txHash": "0xf39dca916c39aa747e91795c24b044eb42307d04909012f8d4bf862bbbe7643b",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x74A037d5d9E1De67b5bfa87cc013E8Ff220Ea011",
-      "txHash": "0x2cb9537b5c7a72d3303e07c05a762a2381743bcdd39ceeb8866603c8ba7fee91",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x85AE2074B76bf0eDAc3eA60B6F36434977136Ff0",
-      "txHash": "0x31d38cba8e1d0c4eb6aa641f97d601cc8d17ddaef8a60aa6c85e33f657be484f",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x2896D1850D298c6C7676B924e70D7313552A8e21",
-      "txHash": "0xcfaefd6553a611c5e57a197ac034066dbd987e15652194d75fef2a2374bc4595",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x45055e82Fe3dc322a81a50b4a973c26de9B4D35c",
-      "txHash": "0xd9af81d0e44b081711edfa15e3a4735e7f584226ab5383e4b180246337a67e25",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x684F739F116f182805B8C1298c7336e193b210C4",
-      "txHash": "0x5c853096f1855fac9b6fdaae2f9bd4ad56ae83494b70f2218dfd1599626742e3",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x5bB69EF5aab8abc546C2fFd98580F6B5312c7dAB",
-      "txHash": "0xd8b509a853302100fa5e8a8a4777b82680b58668d6dd6b0b9582774b7200d008",
+      "address": "0x5056F7CB0657Fa6B52eCa52A4C62Df221E90387E",
+      "txHash": "0x3a635624bc1610a1e5c1e9199810e16ab958d4db52f31115e4a1feef1ccbd83b",
       "kind": "transparent"
     }
   ],
   "impls": {
     "6354c364c44a86ba95d36eaf9f29454ac35c947df64504f4c87c1e07877b8e9f": {
-      "address": "0xd3111576197b4DcCa7E95fCE4Db706852F49b1C7",
-      "txHash": "0x28cdb3f3a93cec522034dbdd18d60f9f9b893e4ac9096a5a0cac668910bcb6f5",
+      "address": "0x90a4531912B3c46E740923D553200aAE543C4C8e",
+      "txHash": "0x74b40bfa53269ccf4679dd9485d872ab6d9799cc066ceb7cf38b258c62958d3e",
       "layout": {
         "storage": [
           {
@@ -139,8 +109,8 @@
       }
     },
     "91b5137a46661486336533631f29c001638864eddb3898765eeb57612e276137": {
-      "address": "0xCc443026d7e2C7144a0e0A53DB00518480356817",
-      "txHash": "0xb7cee8ff11908c574fd599e262c58d085aa1d6c36b363bc903e521049fd6837d",
+      "address": "0xf859Bf7F30A0Cc3ca6A603D3440033378194cc39",
+      "txHash": "0xcc04a48df92b90d76c22da6b1739eee9527b33fdf7d5d14608b1cfec1f1277a8",
       "layout": {
         "storage": [
           {
@@ -206,7 +176,7 @@
           {
             "contract": "JFeesCollectorStorage",
             "label": "uniV2Router02",
-            "type": "t_contract(IUniswapV2Router02)5829",
+            "type": "t_contract(IUniswapV2Router02)5855",
             "src": "JFeesCollectorStorage.sol:19"
           },
           {
@@ -229,7 +199,7 @@
           "t_bool": {
             "label": "bool"
           },
-          "t_contract(IUniswapV2Router02)5829": {
+          "t_contract(IUniswapV2Router02)5855": {
             "label": "contract IUniswapV2Router02"
           },
           "t_array(t_uint256)49_storage": {
@@ -241,657 +211,9 @@
         }
       }
     },
-    "ad16e14a9aa64862c846ed0d3a9357d2e2b7a930d857391c37eb85381f17039f": {
-      "address": "0x7b512d8415e175C7E7BAF194Fc1fBfe43E5B27d0",
-      "txHash": "0x12c2903655559964e53e41cada17701314813fc0068ff68ee88629b25bf9f5e0",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "_owner",
-            "type": "t_address",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
-          },
-          {
-            "contract": "JTranchesDeployerStorage",
-            "label": "jYearnAddress",
-            "type": "t_address",
-            "src": "JTranchesDeployerStorage.sol:13"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          },
-          "t_bool": {
-            "label": "bool"
-          }
-        }
-      }
-    },
-    "8b4830972d36639e5f328ea26af646ebc83c8dc27f9ea940ac1d96dd5209fbdf": {
-      "address": "0x0ff09d883cD327d777019E62101Be7296cCF441b",
-      "txHash": "0xefca736c49adcceff31e8667ece58531f42e382e18c7d669e88acd645a96d3fd",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "_owner",
-            "type": "t_address",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
-          },
-          {
-            "contract": "ReentrancyGuardUpgradeable",
-            "label": "_status",
-            "type": "t_uint256",
-            "src": "../@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:37"
-          },
-          {
-            "contract": "ReentrancyGuardUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:67"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "adminToolsAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:36"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "feesCollectorAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:37"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "tranchesDeployerAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:38"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "lendingPoolAddressProvider",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:39"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "tranchePairsCounter",
-            "type": "t_uint256",
-            "src": "JYearnStorage.sol:41"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "redeemTimeout",
-            "type": "t_uint32",
-            "src": "JYearnStorage.sol:43"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "trancheAddresses",
-            "type": "t_mapping(t_uint256,t_struct(TrancheAddresses)4360_storage)",
-            "src": "JYearnStorage.sol:45"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "trancheParameters",
-            "type": "t_mapping(t_uint256,t_struct(TrancheParameters)4373_storage)",
-            "src": "JYearnStorage.sol:46"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "lastActivity",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "JYearnStorage.sol:48"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "trancheDepositEnabled",
-            "type": "t_mapping(t_uint256,t_bool)",
-            "src": "JYearnStorage.sol:50"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "rewardsToken",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:51"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "incentivesControllerAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:58"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakeCounterTrA",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
-            "src": "JYearnStorage.sol:61"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakeCounterTrB",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
-            "src": "JYearnStorage.sol:62"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakingDetailsTrancheA",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4410_storage)))",
-            "src": "JYearnStorage.sol:64"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakingDetailsTrancheB",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4410_storage)))",
-            "src": "JYearnStorage.sol:65"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_uint32": {
-            "label": "uint32"
-          },
-          "t_mapping(t_uint256,t_struct(TrancheAddresses)4360_storage)": {
-            "label": "mapping(uint256 => struct JYearnStorage.TrancheAddresses)"
-          },
-          "t_struct(TrancheAddresses)4360_storage": {
-            "label": "struct JYearnStorage.TrancheAddresses",
-            "members": [
-              {
-                "label": "buyerCoinAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "yTokenAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "ATrancheAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "BTrancheAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "isVault",
-                "type": "t_bool"
-              }
-            ]
-          },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_mapping(t_uint256,t_struct(TrancheParameters)4373_storage)": {
-            "label": "mapping(uint256 => struct JYearnStorage.TrancheParameters)"
-          },
-          "t_struct(TrancheParameters)4373_storage": {
-            "label": "struct JYearnStorage.TrancheParameters",
-            "members": [
-              {
-                "label": "trancheAFixedPercentage",
-                "type": "t_uint256"
-              },
-              {
-                "label": "trancheALastActionTime",
-                "type": "t_uint256"
-              },
-              {
-                "label": "storedTrancheAPrice",
-                "type": "t_uint256"
-              },
-              {
-                "label": "trancheACurrentRPS",
-                "type": "t_uint256"
-              },
-              {
-                "label": "redemptionPercentage",
-                "type": "t_uint16"
-              },
-              {
-                "label": "underlyingDecimals",
-                "type": "t_uint8"
-              }
-            ]
-          },
-          "t_uint16": {
-            "label": "uint16"
-          },
-          "t_uint8": {
-            "label": "uint8"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)"
-          },
-          "t_mapping(t_uint256,t_bool)": {
-            "label": "mapping(uint256 => bool)"
-          },
-          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
-            "label": "mapping(address => mapping(uint256 => uint256))"
-          },
-          "t_mapping(t_uint256,t_uint256)": {
-            "label": "mapping(uint256 => uint256)"
-          },
-          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4410_storage)))": {
-            "label": "mapping(address => mapping(uint256 => mapping(uint256 => struct JYearnStorage.StakingDetails)))"
-          },
-          "t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4410_storage))": {
-            "label": "mapping(uint256 => mapping(uint256 => struct JYearnStorage.StakingDetails))"
-          },
-          "t_mapping(t_uint256,t_struct(StakingDetails)4410_storage)": {
-            "label": "mapping(uint256 => struct JYearnStorage.StakingDetails)"
-          },
-          "t_struct(StakingDetails)4410_storage": {
-            "label": "struct JYearnStorage.StakingDetails",
-            "members": [
-              {
-                "label": "startTime",
-                "type": "t_uint256"
-              },
-              {
-                "label": "amount",
-                "type": "t_uint256"
-              }
-            ]
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          }
-        }
-      }
-    },
-    "cb6303ad241e5a19f18acb157c6d3909a72327656290d036d777e42a3ae3d27d": {
-      "address": "0xc595fe29f1aFe608b1646A644682a17394bE7849",
-      "txHash": "0xa78de5b437314ae273bc391966121a4f8dc6bd9e7897b835309f96d9a861a916",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "_owner",
-            "type": "t_address",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          },
-          "t_bool": {
-            "label": "bool"
-          }
-        }
-      }
-    },
-    "d63171396956ddb1638c7996170e40f14d25ee5e1929a126354ab37bb7edcdfd": {
-      "address": "0x53c3b8845903446FF015632B7917ecAA623395eC",
-      "txHash": "0x00ba671e7ed03a29c8819185de2974b72975bfd03ef48640697c65cd3a10ea77",
-      "layout": {
-        "storage": [
-          {
-            "contract": "Initializable",
-            "label": "_initialized",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
-          },
-          {
-            "contract": "Initializable",
-            "label": "_initializing",
-            "type": "t_bool",
-            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
-          },
-          {
-            "contract": "ContextUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)50_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "_owner",
-            "type": "t_address",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
-          },
-          {
-            "contract": "OwnableUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
-          },
-          {
-            "contract": "ReentrancyGuardUpgradeable",
-            "label": "_status",
-            "type": "t_uint256",
-            "src": "../@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:37"
-          },
-          {
-            "contract": "ReentrancyGuardUpgradeable",
-            "label": "__gap",
-            "type": "t_array(t_uint256)49_storage",
-            "src": "../@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:67"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "adminToolsAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:34"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "feesCollectorAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:35"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "tranchesDeployerAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:36"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "yfiTokenAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:38"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "yfiRewardsAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:39"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "tranchePairsCounter",
-            "type": "t_uint256",
-            "src": "JYearnStorage.sol:41"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "redeemTimeout",
-            "type": "t_uint32",
-            "src": "JYearnStorage.sol:43"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "trancheAddresses",
-            "type": "t_mapping(t_uint256,t_struct(TrancheAddresses)4514_storage)",
-            "src": "JYearnStorage.sol:45"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "trancheParameters",
-            "type": "t_mapping(t_uint256,t_struct(TrancheParameters)4527_storage)",
-            "src": "JYearnStorage.sol:46"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "lastActivity",
-            "type": "t_mapping(t_address,t_uint256)",
-            "src": "JYearnStorage.sol:48"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "trancheDepositEnabled",
-            "type": "t_mapping(t_uint256,t_bool)",
-            "src": "JYearnStorage.sol:50"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "incentivesControllerAddress",
-            "type": "t_address",
-            "src": "JYearnStorage.sol:57"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakeCounterTrA",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
-            "src": "JYearnStorage.sol:60"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakeCounterTrB",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
-            "src": "JYearnStorage.sol:61"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakingDetailsTrancheA",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)))",
-            "src": "JYearnStorage.sol:63"
-          },
-          {
-            "contract": "JYearnStorage",
-            "label": "stakingDetailsTrancheB",
-            "type": "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)))",
-            "src": "JYearnStorage.sol:64"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address"
-          },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_uint32": {
-            "label": "uint32"
-          },
-          "t_mapping(t_uint256,t_struct(TrancheAddresses)4514_storage)": {
-            "label": "mapping(uint256 => struct JYearnStorage.TrancheAddresses)"
-          },
-          "t_struct(TrancheAddresses)4514_storage": {
-            "label": "struct JYearnStorage.TrancheAddresses",
-            "members": [
-              {
-                "label": "buyerCoinAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "yTokenAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "ATrancheAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "BTrancheAddress",
-                "type": "t_address"
-              },
-              {
-                "label": "isVault",
-                "type": "t_bool"
-              }
-            ]
-          },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_mapping(t_uint256,t_struct(TrancheParameters)4527_storage)": {
-            "label": "mapping(uint256 => struct JYearnStorage.TrancheParameters)"
-          },
-          "t_struct(TrancheParameters)4527_storage": {
-            "label": "struct JYearnStorage.TrancheParameters",
-            "members": [
-              {
-                "label": "trancheAFixedPercentage",
-                "type": "t_uint256"
-              },
-              {
-                "label": "trancheALastActionTime",
-                "type": "t_uint256"
-              },
-              {
-                "label": "storedTrancheAPrice",
-                "type": "t_uint256"
-              },
-              {
-                "label": "trancheACurrentRPS",
-                "type": "t_uint256"
-              },
-              {
-                "label": "redemptionPercentage",
-                "type": "t_uint16"
-              },
-              {
-                "label": "underlyingDecimals",
-                "type": "t_uint8"
-              }
-            ]
-          },
-          "t_uint16": {
-            "label": "uint16"
-          },
-          "t_uint8": {
-            "label": "uint8"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)"
-          },
-          "t_mapping(t_uint256,t_bool)": {
-            "label": "mapping(uint256 => bool)"
-          },
-          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
-            "label": "mapping(address => mapping(uint256 => uint256))"
-          },
-          "t_mapping(t_uint256,t_uint256)": {
-            "label": "mapping(uint256 => uint256)"
-          },
-          "t_mapping(t_address,t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)))": {
-            "label": "mapping(address => mapping(uint256 => mapping(uint256 => struct JYearnStorage.StakingDetails)))"
-          },
-          "t_mapping(t_uint256,t_mapping(t_uint256,t_struct(StakingDetails)4564_storage))": {
-            "label": "mapping(uint256 => mapping(uint256 => struct JYearnStorage.StakingDetails))"
-          },
-          "t_mapping(t_uint256,t_struct(StakingDetails)4564_storage)": {
-            "label": "mapping(uint256 => struct JYearnStorage.StakingDetails)"
-          },
-          "t_struct(StakingDetails)4564_storage": {
-            "label": "struct JYearnStorage.StakingDetails",
-            "members": [
-              {
-                "label": "startTime",
-                "type": "t_uint256"
-              },
-              {
-                "label": "amount",
-                "type": "t_uint256"
-              }
-            ]
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
-          }
-        }
-      }
-    },
     "f8a22bb2dc9977da7124ebf179fea1e7816580fc2764a73098df139c0c3b3e9d": {
-      "address": "0x2fD0740ea743c8Ec3534fCf64A308A68f4C3B2B1",
-      "txHash": "0xeeb54493af652bf6dc533aeeb406148fa9e347d74232f736bd30065bc7fb2be1",
+      "address": "0xa387556E1Ce790cADfA54BDd26392DA8462640a0",
+      "txHash": "0x2d5ba45b2b690552c48feba95ad37ad012955ee97ede77ee9f4fa8985518e898",
       "layout": {
         "storage": [
           {
@@ -951,8 +273,8 @@
       }
     },
     "2f2752c22518de3d2a48bee236987924b3b088c76683973f6c765352e04cb574": {
-      "address": "0x5d4b92887F1911B1ECa4E476C993f8A6966Ac6e6",
-      "txHash": "0x834484b027563258a33c10563d3dec650b277a4b444c62f3c6a76170ab7b8e7a",
+      "address": "0xb702E11551eF3c70Ac01993CA6Eb4eb5Dd2696AC",
+      "txHash": "0x2dd9dd9569158208618e44f7de487847e5fc7b9e79cdfa0876506e6234e8b801",
       "layout": {
         "storage": [
           {
@@ -1212,6 +534,61 @@
           },
           "t_array(t_uint256)50_storage": {
             "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "cb6303ad241e5a19f18acb157c6d3909a72327656290d036d777e42a3ae3d27d": {
+      "address": "0x6575928b43670Af760Dce427963b532027aC3A6F",
+      "txHash": "0xb9068ef6efef8141e529b89eba0228f97007bb5933f9809f17ab411f4cadc32b",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:21"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:77"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
           }
         }
       }
