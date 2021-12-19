@@ -125,5 +125,14 @@ module.exports = {
 
   db: {
     enabled: false
+  }, 
+  api_keys: {
+    etherscan: 'MY_API_KEY',
+    bscscan: 'MY_API_KEY',
+    snowtrace: 'MY_API_KEY',
+    polygonscan: 'MY_API_KEY',
+    ftmscan: `${process.env.FTMSCAN_KEY}`,
+    hecoinfo: 'MY_API_KEY',
+    moonscan: 'MY_API_KEY'
   }
 };

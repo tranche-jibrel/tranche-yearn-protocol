@@ -4,7 +4,6 @@ node_modules/
 build/
 unused/
 dist/
-.openzeppelin/dev*.json
 *.txt
 coverage
 coverage.json
@@ -15,4 +14,6 @@ cache/
 oldTests/
 flatten/
 strategies/
+unknown*
+.coverage*
 

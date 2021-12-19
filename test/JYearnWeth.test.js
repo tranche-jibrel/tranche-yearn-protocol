@@ -182,7 +182,7 @@ contract("WETH JYearn", function(accounts) {
 
     // tx = await wethContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
     // tx = await jYearnContract.buyTrancheBToken(0, toWei(10), {from: user1, value: toWei(10)});
-    tx = await jYearnContract.buyTrancheBToken(0, toWei(10), {from: user1});
+    tx = await jYearnContract.buyTrancheBToken(0, toWei(90), {from: user1});
 
     console.log("User1 New WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
     console.log("User1 trB tokens: " + fromWei(await wethTrBContract.balanceOf(user1)) + " byvWEB");

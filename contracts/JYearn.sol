@@ -127,7 +127,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     }
 
     /**
-     * @dev set redemption timeout
+     * @dev set new token and if is a vault or not
      * @param _trancheNum tranche number
      * @param _yTokenAddress yToken or yVault address
      * @param _isVault vault or token
@@ -140,7 +140,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
     }
 
     /**
-     * @dev set redemption timeout
+     * @dev migrate tranche values to another contract
      * @param _trancheNum tranche number
      * @param _newYTokenAddress yToken or yVault address
      * @param _isVault vault or token

@@ -47,8 +47,8 @@ contract JTrancheBToken is Ownable, ERC20, AccessControl, IJTrancheTokens {
 			uint256 tempAmount;
 			uint256 tempValue = value;
 			uint256 stkDetNum = IJYearn(jYearnAddress).getSingleTrancheUserStakeCounterTrB(from, protTrancheNum);
-			for (uint256 i = 1; i<= stkDetNum; i++){
-				(tempTime, tempAmount) = IJYearn(jYearnAddress).getSingleTrancheUserSingleStakeDetailsTrB(from, protTrancheNum, protTrancheNum);
+			for (uint256 i = 1; i <= stkDetNum; i++){
+				(tempTime, tempAmount) = IJYearn(jYearnAddress).getSingleTrancheUserSingleStakeDetailsTrB(from, protTrancheNum, i);
 				if (tempAmount > 0) {
 					if (tempAmount <= tempValue) {
 						IJYearn(jYearnAddress).setTrBStakingDetails(protTrancheNum, from, i, 0, tempTime);

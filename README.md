@@ -44,14 +44,7 @@ Test coverage on JYearn contract: 94.41%
 
 ## Tranche Yearn Protocol Usage
 
-a) deploy JYearn contract and initialize it 
-
-b) set JYearn address in jTranchesDeployer contract
-
-c) call addTrancheToProtocol(address _erc20Contract, string memory _nameA, string memory _symbolA, 
-            string memory _nameB, string memory _symbolB, uint256 _fixedRpb, uint8 _cTokenDec, uint8 _underlyingDec) to set a new tranche set
-
-d) remember to enable every tranche deposit with setTrancheDeposit(uint256 _trancheNum, bool _enable) function
+Please refer to ./migrations/1_deploy_contracts.js file to see how the system could be deployed on the blockchain
 
 Users can now call buy and redeem functions for tranche A & B tokens
 
@@ -68,6 +61,42 @@ migrateYTranche(uint256 _trancheNum, address _newYTokenAddress, bool _isVault)
 ```
 
 All values will be sent to new vault and tokens inside contract will be switched with the new one, no other change
+
+[(Back to top)](#Yearn-Tranche-Protocol)
+
+### Test Coverage
+
+<table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Test %</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>JYearn</td>
+            <td><code>92.28%</code></td>
+            <td>---</td>
+        </tr>
+        <tr>
+            <td>JFeesCollector</td>
+            <td><code>6.25%</code></td>
+            <td>---</td>
+        </tr>
+        <tr>
+            <td>JAdminTools</td>
+            <td><code>57.89%</code></td>
+            <td>---</td>
+        </tr>
+        <tr>
+            <td>JTrancheTokens</td>
+            <td><code>100%</code></td>
+            <td>---</td>
+        </tr>
+    </tbody>
+  </table>
 
 [(Back to top)](#Yearn-Tranche-Protocol)
 
