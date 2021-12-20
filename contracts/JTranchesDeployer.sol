@@ -20,8 +20,9 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
         OwnableUpgradeable.__Ownable_init();
     }
 
-    function setJYearnAddress(address _jYearn) external onlyOwner {
+    function setJYearnAddresses(address _jYearn, address _jATAddress) external onlyOwner {
         jYearnAddress = _jYearn;
+        jAdminToolsAddress = _jATAddress;
     }
 
     modifier onlyProtocol() {
@@ -34,6 +35,8 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
             uint256 _trNum) external override onlyProtocol returns (address) {
         JTrancheAToken jTrancheA = new JTrancheAToken(_nameA, _symbolA, _trNum);
         jTrancheA.setJYearnMinter(msg.sender);
+        // add tranche address to admins!
+        IJAdminTools(jAdminToolsAddress).addAdmin(address(jTrancheA));
         return address(jTrancheA);
     }
 
@@ -42,6 +45,8 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
             uint256 _trNum) external override onlyProtocol returns (address) {
         JTrancheBToken jTrancheB = new JTrancheBToken(_nameB, _symbolB, _trNum);
         jTrancheB.setJYearnMinter(msg.sender);
+        // add tranche address to admins!
+        IJAdminTools(jAdminToolsAddress).addAdmin(address(jTrancheB));
         return address(jTrancheB);
     }
 
