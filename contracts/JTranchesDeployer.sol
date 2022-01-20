@@ -11,6 +11,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "./JTrancheAToken.sol";
 import "./JTrancheBToken.sol";
 import "./interfaces/IJTranchesDeployer.sol";
+import "./interfaces/IJAdminTools.sol";
 import "./JTranchesDeployerStorage.sol";
 
 contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTranchesDeployer {

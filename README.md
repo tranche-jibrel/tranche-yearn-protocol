@@ -143,28 +143,23 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JTranchesDeployer</td>
-            <td><code>18.27</code></td>
+            <td><code>18.46</code></td>
             <td>Tranche A & B token deployer (implementation): this contract deploys tranche tokens everytime a new tranche is opened by the core protocol contract. Upgradeable.</td>
         </tr>
         <tr>
             <td>JTranchesDeployerStorage</td>
-            <td><code>0.14</code></td>
+            <td><code>0.17</code></td>
             <td>Tranche A & B token deployer (storage)</td>
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>19.29</code></td>
+            <td><code>19.28</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens. Upgradeable.</td>
         </tr>
         <tr>
             <td>JYearnStorage</td>
             <td><code>1.74</code></td>
             <td>Core contract protocol (storage)</td>
-        </tr>
-        <tr>
-            <td>WETHGateway</td>
-            <td><code>2.21</code></td>
-            <td>Ethereum gateway, useful when dealing with ethers and having a simple contract to change ETH in WETH and viceversa. Not upgradeable.</td>
         </tr>
     </tbody>
   </table>

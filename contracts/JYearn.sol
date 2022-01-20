@@ -174,7 +174,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
             string memory _symbolA, 
             string memory _nameB, 
             string memory _symbolB, 
-            uint256 _fixedRpb, 
+            uint256 _fixPercentage, 
             uint8 _underlyingDec) external onlyAdmins nonReentrant {
         require(tranchesDeployerAddress != address(0), "JYearn: set tranche eth deployer");
 
@@ -187,7 +187,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
                 IJTranchesDeployer(tranchesDeployerAddress).deployNewTrancheBTokens(_nameB, _symbolB, tranchePairsCounter); 
         
         trancheParameters[tranchePairsCounter].underlyingDecimals = _underlyingDec;
-        trancheParameters[tranchePairsCounter].trancheAFixedPercentage = _fixedRpb;
+        trancheParameters[tranchePairsCounter].trancheAFixedPercentage = _fixPercentage;
         trancheParameters[tranchePairsCounter].trancheALastActionTime = block.timestamp;
 
         trancheParameters[tranchePairsCounter].storedTrancheAPrice = uint256(1e18);
@@ -282,9 +282,7 @@ contract JYearn is OwnableUpgradeable, ReentrancyGuardUpgradeable, JYearnStorage
      * @return tranche A token current price
      */
     function calcRPSFromPercentage(uint256 _trancheNum) public returns (uint256) {
-        // if normalized price in tranche A price, everything should be scaled to 1e18 
-        trancheParameters[_trancheNum].trancheACurrentRPS = trancheParameters[_trancheNum].storedTrancheAPrice
-                        .mul(trancheParameters[_trancheNum].trancheAFixedPercentage).div(SECONDS_PER_YEAR).div(1e18);
+        trancheParameters[_trancheNum].trancheACurrentRPS = (trancheParameters[_trancheNum].trancheAFixedPercentage).div(SECONDS_PER_YEAR).div(1e18);
         return trancheParameters[_trancheNum].trancheACurrentRPS;
     }
 
