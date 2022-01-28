@@ -18,8 +18,6 @@ const fs = require('fs');
 const yVault_ABI_V1 = JSON.parse(fs.readFileSync('./test/utils/yVaultV1.abi', 'utf8'));
 const yVault_ABI_V2 = JSON.parse(fs.readFileSync('./test/utils/yVaultV2.abi', 'utf8'));
 const USDC_ABI = JSON.parse(fs.readFileSync('./test/utils/Usdc.abi', 'utf8'));
-// console.log(JSON.stringify(contract.abi));
-// console.log(JSON.stringify(yVault_ABI_V2));
 
 const myERC20 = artifacts.require("myERC20");
 
@@ -34,12 +32,14 @@ const JTrancheBToken = artifacts.require('JTrancheBToken');
 
 const MYERC20_TOKEN_SUPPLY = 5000000;
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
-const yWETH_Address = '0x87b1f4cf9BD63f7BBD3eE1aD04E8F52540349347';
-const yUSDC_Address = '0xd6aD7a6750A7593E092a9B218d66C0A814a3436e';
-const yvUSDC_Address = '0x5f18C75AbDAe578b483E5F43f12a39cF75b973a9';
+const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';  //ETH
+// const USDC_ADDRESS = '0x04068da6c83afcfa0e13ba15a6696662335d5b75';  //FTM
+const yWETH_Address = '0x87b1f4cf9BD63f7BBD3eE1aD04E8F52540349347'; //ETH
+// const WETH_ADDRESS = "0x74b23882a30290451A17c44f4F05243b6b58C76d";  //FTM
+const yvUSDC_Address = '0x5f18C75AbDAe578b483E5F43f12a39cF75b973a9';  //ETH
+// const yvUSDC_Address = '0xef0210eb96c7eb36af8ed1c20306462764935607';  //FTM
 
-const UnBlockedAccount = '0xAe2D4617c862309A3d75A0fFB358c7a5009c673F';
+const UnBlockedAccount = '0xAe2D4617c862309A3d75A0fFB358c7a5009c673F';  //ETH
 
 let usdcContract, jFCContract, jATContract, jTrDeplContract, jYearnContract;
 let ethTrAContract, ethTrBContract, usdcTrAContract, usdcTrBContract;
@@ -91,9 +91,6 @@ contract("USDC JYearn", function(accounts) {
     expect(jYearnContract.address).to.be.not.equal(ZERO_ADDRESS);
     expect(jYearnContract.address).to.match(/0x[0-9a-fA-F]{40}/);
     console.log(jYearnContract.address);
-    // await jYearnContract.setRedemptionTimeout(0, {
-    //   from: accounts[0]
-    // });
 
     trParams0 = await jYearnContract.trancheAddresses(0);
     ethTrAContract = await JTrancheAToken.at(trParams0.ATrancheAddress);
@@ -129,25 +126,20 @@ contract("USDC JYearn", function(accounts) {
     console.log(usdcTrBContract.address);
   });
 
-  // it("check if there are some USDC in unblocked account", async function () {
-  //   console.log(await usdcContract.methods.balanceOf(UnBlockedAccount).call())
-  // });
-
   it("user1 buys some token usdcTrA", async function () {
     trAddresses = await jYearnContract.trancheAddresses(2); //.cTokenAddress;
     console.log("addresses tranche A: " + JSON.stringify(trAddresses, ["buyerCoinAddress", "yTokenAddress", "ATrancheAddress", "BTrancheAddress"]));
-    trPar = await jYearnContract.trancheParameters(2);
-    console.log("param tranche A: " + JSON.stringify(trPar, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPS", "underlyingDecimals"]));
+    trParams = await jYearnContract.trancheParameters(2);
+    console.log("param tranche A: " + JSON.stringify(trParams, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPS", "underlyingDecimals"]));
     tx = await jYearnContract.calcRPSFromPercentage(2, {from: user1});
 
-    trPar = await jYearnContract.trancheParameters(2);
-    console.log("rps tranche A: " + trPar[3].toString());
-    console.log("price tranche A: " + fromWei(trPar[2].toString()));
+    trParams = await jYearnContract.trancheParameters(2);
+    console.log("rps tranche A: " + trParams[3].toString());
+    console.log("price tranche A: " + fromWei(trParams[2].toString()));
     console.log("yvUSDC price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(2)))
-    trParams = await jYearnContract.trancheAddresses(2);
-    expect(trParams.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
-    expect(trParams.yTokenAddress).to.be.equal(yvUSDC_Address);
-    // console.log("yUSDC price: "+ fromWei(await jYearnContract.getYTokenPrice(2)));
+    trAddress = await jYearnContract.trancheAddresses(2);
+    expect(trAddress.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
+    expect(trAddress.yTokenAddress).to.be.equal(yvUSDC_Address);
 
     console.log("user1 USDC balance: " + fromWei6Dec(await usdcContract.methods.balanceOf(user1).call()) + " USDC");
 
@@ -159,11 +151,8 @@ contract("USDC JYearn", function(accounts) {
     console.log("user1 trA tokens: " + fromWei(await usdcTrAContract.balanceOf(user1)) + " ayUSDC");
     console.log("JYearn USDC balance: " + fromWei6Dec(await usdcContract.methods.balanceOf(jYearnContract.address).call()) + " USDC");
     console.log("JYearn yDAI balance: " + fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
-    trPar = await jYearnContract.trancheParameters(2);
-    console.log("TrA price: " + fromWei(trPar[2].toString()));
-    trAddresses = await jYearnContract.trancheAddresses(2); //.cTokenAddress;
-    trPars = await jYearnContract.trancheParameters(2);
-    // console.log("JYearn Price: " + await jCompHelperContract.getCompoundPriceHelper(1));
+    trParams = await jYearnContract.trancheParameters(2);
+    console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)) + " USDC");
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)) + " USDC");
 
@@ -187,9 +176,8 @@ contract("USDC JYearn", function(accounts) {
     console.log("User1 trB tokens: " + fromWei(await usdcTrBContract.balanceOf(user1)) + " byUSDC");
     console.log("JYearn USDC balance: " + fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2, 0)));
-    trAddresses = await jYearnContract.trancheAddresses(2);
-    trPar = await jYearnContract.trancheParameters(2);
-    console.log("TrA price: " + fromWei(trPar[2].toString()));
+    trParams = await jYearnContract.trancheParameters(2);
+    console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
     console.log("TrB value: " + fromWei6Dec(await jYearnContract.getTrBValue(2)));
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
@@ -218,8 +206,8 @@ contract("USDC JYearn", function(accounts) {
     console.log("JYearn yUsdc balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
     console.log("yvUSDC price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(2)))
     tx = await usdcTrAContract.approve(jYearnContract.address, bal, {from: user1});
-    trPar = await jYearnContract.trancheParameters(2);
-    console.log("TrA price: " + fromWei(trPar[2].toString()));
+    trParams = await jYearnContract.trancheParameters(2);
+    console.log("TrA price: " + fromWei(trParams[2].toString()));
 
     tx = await jYearnContract.redeemTrancheAToken(2, bal, {from: user1});
     newBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
@@ -302,8 +290,10 @@ contract("USDC JYearn", function(accounts) {
 
       await jYearnContract.transferTokenToFeesCollector(USDC_ADDRESS, 0)
 
-      const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e';
-      const YFI_REWARDS_ADDRESS = '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862';
+      const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e'; //ETH
+      // const YFI_TOKEN_ADDRESS = '0x29b0Da86e484E1C0029B56e817912d778aC0EC69'; //FTM
+      const YFI_REWARDS_ADDRESS = '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862'; //ETH
+      // const YFI_REWARDS_ADDRESS = ZERO_ADDRESS; //FTM
       await jYearnContract.setYFIAddresses(YFI_TOKEN_ADDRESS, YFI_REWARDS_ADDRESS)
 
       await jYearnContract.getYFIUnclaimedRewardShares()

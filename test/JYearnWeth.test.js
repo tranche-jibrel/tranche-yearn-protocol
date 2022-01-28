@@ -35,10 +35,12 @@ const JTrancheBToken = artifacts.require('JTrancheBToken');
 const MYERC20_TOKEN_SUPPLY = 5000000;
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
-const yvWETH_ADDRESS = '0xa258C4606Ca8206D8aA700cE2143D7db854D168c';
+const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';  //ETH
+// const WETH_ADDRESS = "0x74b23882a30290451A17c44f4F05243b6b58C76d";  //FTM
+const yvWETH_ADDRESS = '0xa258C4606Ca8206D8aA700cE2143D7db854D168c';  //ETH
+// const yvWETH_ADDRESS = "0xce2fc0bdc18bd6a4d9a725791a3dee33f3a23bb7";  //FTM
 
-const UnBlockedAccount = '0x2fEb1512183545f48f6b9C5b4EbfCaF49CfCa6F3';
+const UnBlockedAccount = '0x2fEb1512183545f48f6b9C5b4EbfCaF49CfCa6F3';  //ETH
 
 let wethContract, jFCContract, jATContract, jTrDeplContract, jYearnContract;
 let wethTrAContract, wethTrBContract;
@@ -89,9 +91,6 @@ contract("WETH JYearn", function(accounts) {
     expect(jYearnContract.address).to.be.not.equal(ZERO_ADDRESS);
     expect(jYearnContract.address).to.match(/0x[0-9a-fA-F]{40}/);
     console.log(jYearnContract.address);
-    // await jYearnContract.setRedemptionTimeout(0, {
-    //   from: accounts[0]
-    // });
 
     trParams0 = await jYearnContract.trancheAddresses(0);
     wethTrAContract = await JTrancheAToken.at(trParams0.ATrancheAddress);
@@ -127,41 +126,35 @@ contract("WETH JYearn", function(accounts) {
     console.log(usdcTrBContract.address);
   });
 
-  // it("check if there are some WETH in unblocked account", async function () {
-  //   console.log(await wethContract.methods.balanceOf(UnBlockedAccount).call())
-  // });
-
   it("user1 buys some token WETHTrA", async function () {
     await jYearnContract.setTrancheRedemptionPercentage(0, 9990)
 
     trAddresses = await jYearnContract.trancheAddresses(0); //.cTokenAddress;
     console.log("addresses tranche A: " + JSON.stringify(trAddresses, ["buyerCoinAddress", "yTokenAddress", "ATrancheAddress", "BTrancheAddress"]));
-    trPar = await jYearnContract.trancheParameters(0);
-    console.log("param tranche A: " + JSON.stringify(trPar, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPB", "underlyingDecimals"]));
+    trParams = await jYearnContract.trancheParameters(0);
+    console.log("param tranche A: " + JSON.stringify(trParams, ["trancheAFixedPercentage", "trancheALastActionBlock", "storedTrancheAPrice", "trancheACurrentRPB", "underlyingDecimals"]));
     tx = await jYearnContract.calcRPSFromPercentage(0, {from: user1});
 
-    trPar = await jYearnContract.trancheParameters(0);
-    console.log("rps tranche A: " + trPar[3].toString());
-    console.log("price tranche A: " + fromWei(trPar[2].toString()));
+    trParams = await jYearnContract.trancheParameters(0);
+    console.log("rps tranche A: " + trParams[3].toString());
+    console.log("price tranche A: " + fromWei(trParams[2].toString()));
     console.log("yvWETH price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(0)))
-    trParams = await jYearnContract.trancheAddresses(0);
-    expect(trParams.buyerCoinAddress).to.be.equal(WETH_ADDRESS);
-    expect(trParams.yTokenAddress).to.be.equal(yvWETH_ADDRESS);
+    trAddress = await jYearnContract.trancheAddresses(2);
+    expect(trAddress.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
+    expect(trAddress.yTokenAddress).to.be.equal(yvUSDC_Address);
     console.log("user1 WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
 
     tx = await wethContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
-    // tx = await jYearnContract.buyTrancheAToken(0, toWei(10), {from: user1, value: toWei(10)});
     tx = await jYearnContract.buyTrancheAToken(0, toWei(10), {from: user1});
 
     console.log("user1 New WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
     console.log("user1 trA tokens: " + fromWei(await wethTrAContract.balanceOf(user1)) + " ayvWEA");
     console.log("JYearn WETH balance: " + fromWei(await wethContract.methods.balanceOf(jYearnContract.address).call()) + " WETH");
     console.log("JYearn yvWETH balance: " + fromWei(await jYearnContract.getTokenBalance(yvWETH_ADDRESS)) + " yvWETH");
-    trPar = await jYearnContract.trancheParameters(0);
-    console.log("TrA price: " + fromWei(trPar[2].toString()));
-    trAddresses = await jYearnContract.trancheAddresses(0); //.cTokenAddress;
+    trParams = await jYearnContract.trancheParameters(0);
+    console.log("TrA price: " + fromWei(trParams[2].toString()));
+    trAddresses = await jYearnContract.trancheAddresses(0);
     trPars = await jYearnContract.trancheParameters(0);
-    // console.log("JYearn Price: " + await jCompHelperContract.getCompoundPriceHelper(1));
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)) + " WETH");
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)) + " WETH");
 
@@ -180,8 +173,6 @@ contract("WETH JYearn", function(accounts) {
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)));
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0, 0)));
 
-    // tx = await wethContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
-    // tx = await jYearnContract.buyTrancheBToken(0, toWei(10), {from: user1, value: toWei(10)});
     tx = await jYearnContract.buyTrancheBToken(0, toWei(90), {from: user1});
 
     console.log("User1 New WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
@@ -189,8 +180,8 @@ contract("WETH JYearn", function(accounts) {
     console.log("JYearn WETH balance: " + fromWei(await jYearnContract.getTokenBalance(yvWETH_ADDRESS)) + " yvWETH");
     console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0, 0)));
     trAddresses = await jYearnContract.trancheAddresses(0);
-    trPar = await jYearnContract.trancheParameters(0);
-    console.log("TrA price: " + fromWei(trPar[2].toString()));
+    trParams = await jYearnContract.trancheParameters(0);
+    console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)));
     console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(0)));
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)));
@@ -218,8 +209,8 @@ contract("WETH JYearn", function(accounts) {
     console.log("trA tokens total: "+ fromWei(tot) + " ayvWEA");
     console.log("JYearn yvWETH balance: "+ fromWei(await jYearnContract.getTokenBalance(yvWETH_ADDRESS)) + " yvWETH");
     tx = await wethTrAContract.approve(jYearnContract.address, bal, {from: user1});
-    trPar = await jYearnContract.trancheParameters(0);
-    console.log("TrA price: " + fromWei(trPar[2].toString()));
+    trParams = await jYearnContract.trancheParameters(0);
+    console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("yvWETH price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(0)))
 
     tx = await jYearnContract.redeemTrancheAToken(0, bal, {from: user1});
@@ -300,8 +291,10 @@ contract("WETH JYearn", function(accounts) {
 
       await jYearnContract.getSirControllerAddress()
       
-      const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e';
-      const YFI_REWARDS_ADDRESS = '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862';
+      const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e'; //ETH
+      // const YFI_TOKEN_ADDRESS = '0x29b0Da86e484E1C0029B56e817912d778aC0EC69'; //FTM
+      const YFI_REWARDS_ADDRESS = '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862'; //ETH
+      // const YFI_REWARDS_ADDRESS = ZERO_ADDRESS; //FTM
       await jYearnContract.setYFIAddresses(YFI_TOKEN_ADDRESS, YFI_REWARDS_ADDRESS)
 
       await jYearnContract.getYFIUnclaimedRewardShares()
