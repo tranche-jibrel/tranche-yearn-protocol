@@ -37,7 +37,7 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
         JTrancheAToken jTrancheA = new JTrancheAToken(_nameA, _symbolA, _trNum);
         jTrancheA.setJYearnMinter(msg.sender);
         // add tranche address to admins!
-        IJAdminTools(jAdminToolsAddress).addAdmin(address(jTrancheA));
+        // IJAdminTools(jAdminToolsAddress).addAdmin(address(jTrancheA));
         return address(jTrancheA);
     }
 
@@ -47,7 +47,7 @@ contract JTranchesDeployer is OwnableUpgradeable, JTranchesDeployerStorage, IJTr
         JTrancheBToken jTrancheB = new JTrancheBToken(_nameB, _symbolB, _trNum);
         jTrancheB.setJYearnMinter(msg.sender);
         // add tranche address to admins!
-        IJAdminTools(jAdminToolsAddress).addAdmin(address(jTrancheB));
+        // IJAdminTools(jAdminToolsAddress).addAdmin(address(jTrancheB));
         return address(jTrancheB);
     }
 

@@ -10,13 +10,6 @@ var JTranchesDeployer = artifacts.require('JTranchesDeployer');
 var JTrancheAToken = artifacts.require('JTrancheAToken');
 var JTrancheBToken = artifacts.require('JTrancheBToken');
 
-var myERC20 = artifacts.require("./mocks/myERC20.sol");
-var WETHGateway = artifacts.require('WETHGateway');
-
-var IncentivesController = artifacts.require('./IncentivesController');
-
-const MYERC20_TOKEN_SUPPLY = 5000000;
-
 const DAI_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
 
@@ -32,9 +25,6 @@ module.exports = async (deployer, network, accounts) => {
   if (network == "development") {
     const factoryOwner = accounts[0];
 
-    const mySLICEinstance = await deployProxy(myERC20, [MYERC20_TOKEN_SUPPLY], { from: factoryOwner });
-    console.log('mySLICE Deployed: ', mySLICEinstance.address);
-
     const JATinstance = await deployProxy(JAdminTools, [], { from: factoryOwner });
     console.log('JAdminTools Deployed: ', JATinstance.address);
 
@@ -49,7 +39,7 @@ module.exports = async (deployer, network, accounts) => {
 
     await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
 
-    await JTDeployer.setJYearnAddress(JYInstance.address, { from: factoryOwner });
+    await JTDeployer.setJYearnAddresses(JYInstance.address, JATinstance.address, { from: factoryOwner });
 
     await JYInstance.addTrancheToProtocol(WETH_ADDRESS, yvWETH_Address, true, "jWEthTrancheAToken", "ayvWEA",
       "jWEthTrancheBToken", "byvWEB", web3.utils.toWei("0.04", "ether"), 18, { from: factoryOwner });
@@ -80,11 +70,6 @@ module.exports = async (deployer, network, accounts) => {
     console.log("USDC Tranche B Token Address: " + UsdcTrB.address);
 
     await JYInstance.setTrancheDeposit(2, true);
-
-    const JIController = await deployProxy(IncentivesController, [], { from: factoryOwner });
-    console.log("Incentive Controller mock: " + JIController.address);
-
-    await JYInstance.setincentivesControllerAddress(JIController.address);
 
   } else if (network === 'ftm') {
     let { JADMIN_TOOLS, FEE_COLLECTOR_ADDRESS, YEARN_DEPLOYER,

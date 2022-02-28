@@ -21,8 +21,6 @@ const WETH_ABI = JSON.parse(fs.readFileSync('./test/utils/WETH.abi', 'utf8'));
 // console.log(JSON.stringify(contract.abi));
 // console.log(JSON.stringify(yVault_ABI_V2));
 
-const myERC20 = artifacts.require("myERC20");
-
 const JAdminTools = artifacts.require('JAdminTools');
 const JFeesCollector = artifacts.require('JFeesCollector');
 
@@ -32,7 +30,6 @@ const JTranchesDeployer = artifacts.require('JTranchesDeployer');
 const JTrancheAToken = artifacts.require('JTrancheAToken');
 const JTrancheBToken = artifacts.require('JTrancheBToken');
 
-const MYERC20_TOKEN_SUPPLY = 5000000;
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';  //ETH
@@ -61,11 +58,9 @@ contract("WETH JYearn", function(accounts) {
 
   it("WETH total Supply sent to user1", async function () {
     wethContract = new web3.eth.Contract(WETH_ABI, WETH_ADDRESS);
-    // wethContract = await myERC20.deployed();
     result = await wethContract.methods.totalSupply().call();
     console.log(result.toString())
     console.log("UnBlockedAccount WETH balance: " + fromWei(await wethContract.methods.balanceOf(UnBlockedAccount).call()) + " WETH");
-    // expect(fromWei(result.toString(), "ether")).to.be.equal(MYERC20_TOKEN_SUPPLY.toString());
     await wethContract.methods.transfer(user1, toWei(100)).send({from: UnBlockedAccount})
     console.log("UnBlockedAccount WETH balance: " + fromWei(await wethContract.methods.balanceOf(UnBlockedAccount).call()) + " WETH");
     console.log("user1 WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
@@ -139,9 +134,9 @@ contract("WETH JYearn", function(accounts) {
     console.log("rps tranche A: " + trParams[3].toString());
     console.log("price tranche A: " + fromWei(trParams[2].toString()));
     console.log("yvWETH price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(0)))
-    trAddress = await jYearnContract.trancheAddresses(2);
-    expect(trAddress.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
-    expect(trAddress.yTokenAddress).to.be.equal(yvUSDC_Address);
+    trAddress = await jYearnContract.trancheAddresses(0);
+    expect(trAddress.buyerCoinAddress).to.be.equal(WETH_ADDRESS);
+    expect(trAddress.yTokenAddress).to.be.equal(yvWETH_ADDRESS);
     console.log("user1 WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
 
     tx = await wethContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
@@ -157,9 +152,6 @@ contract("WETH JYearn", function(accounts) {
     trPars = await jYearnContract.trancheParameters(0);
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)) + " WETH");
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)) + " WETH");
-
-    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 0, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   });
 
   it("user1 buys some token WETHTrB", async function () {
@@ -185,10 +177,6 @@ contract("WETH JYearn", function(accounts) {
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)));
     console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(0)));
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)));
-
-    console.log("staker counter trB: " + (await jYearnContract.stakeCounterTrB(user1, 0)).toString())
-    stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 0, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   });
 
   it('time passes...', async function () {
@@ -223,12 +211,6 @@ contract("WETH JYearn", function(accounts) {
     console.log("JYearn new WETH balance: "+ fromWei(await jYearnContract.getTokenBalance(yvWETH_ADDRESS)) + " yvWETH");
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)));
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)));
-
-    console.log("staker counter trA: " + (await jYearnContract.stakeCounterTrA(user1, 1)).toString())
-    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 0, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
-    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 0, 2);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
   it('time passes...', async function () {
@@ -261,10 +243,6 @@ contract("WETH JYearn", function(accounts) {
     console.log("TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)));
     console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(0)));
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)));
-
-    console.log("staker counter trB: " + (await jYearnContract.stakeCounterTrB(user1, 0)).toString())
-    stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 0, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
   describe('higher percentage for test coverage', function() {
@@ -279,17 +257,7 @@ contract("WETH JYearn", function(accounts) {
 
       await jYearnContract.getTrancheACurrentRPS(1)
 
-      await jYearnContract.setTrAStakingDetails(1, user1, 1, 0, 1634150567)
-      await jYearnContract.getSingleTrancheUserStakeCounterTrA(user1, 1)
-      await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrA(user1, 1, 1)
-
-      await jYearnContract.setTrBStakingDetails(1, user1, 1, 0, 1634150567)
-      await jYearnContract.getSingleTrancheUserStakeCounterTrB(user1, 1)
-      await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrB(user1, 1, 1)
-
       await jYearnContract.transferTokenToFeesCollector(WETH_ADDRESS, 0)
-
-      await jYearnContract.getSirControllerAddress()
       
       const YFI_TOKEN_ADDRESS = '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e'; //ETH
       // const YFI_TOKEN_ADDRESS = '0x29b0Da86e484E1C0029B56e817912d778aC0EC69'; //FTM

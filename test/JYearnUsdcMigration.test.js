@@ -21,8 +21,6 @@ const USDC_ABI = JSON.parse(fs.readFileSync('./test/utils/Usdc.abi', 'utf8'));
 // console.log(JSON.stringify(contract.abi));
 // console.log(JSON.stringify(yVault_ABI_V2));
 
-const myERC20 = artifacts.require("myERC20");
-
 const JAdminTools = artifacts.require('JAdminTools');
 const JFeesCollector = artifacts.require('JFeesCollector');
 
@@ -32,7 +30,6 @@ const JTranchesDeployer = artifacts.require('JTranchesDeployer');
 const JTrancheAToken = artifacts.require('JTrancheAToken');
 const JTrancheBToken = artifacts.require('JTrancheBToken');
 
-const MYERC20_TOKEN_SUPPLY = 5000000;
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';  //ETH
 // const USDC_ADDRESS = '0x04068da6c83afcfa0e13ba15a6696662335d5b75';  //FTM
@@ -158,9 +155,6 @@ contract("USDC JYearn", function(accounts) {
     console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)) + " USDC");
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)) + " USDC");
-
-    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 2, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   });
 
   it("user1 buys some token usdcTrB", async function () {
@@ -183,10 +177,6 @@ contract("USDC JYearn", function(accounts) {
     console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
     console.log("TrB value: " + fromWei6Dec(await jYearnContract.getTrBValue(2)));
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
-
-    console.log("staker counter trB: " + (await jYearnContract.stakeCounterTrB(user1, 2)).toString())
-    stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 2, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   });
 
   it('time passes...', async function () {
@@ -230,10 +220,6 @@ contract("USDC JYearn", function(accounts) {
     console.log("JYearn new yUSDC balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(2)));
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
-
-    console.log("staker counter trA: " + (await jYearnContract.stakeCounterTrA(user1, 2)).toString())
-    stkDetails = await jYearnContract.stakingDetailsTrancheA(user1, 2, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
   it('time passes...', async function () {
@@ -264,10 +250,6 @@ contract("USDC JYearn", function(accounts) {
     console.log("TrA Value: " + fromWei(await jYearnContract.getTrAValue(2)));
     console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(2)));
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(2)));
-
-    console.log("staker counter trB: " + (await jYearnContract.stakeCounterTrB(user1, 2)).toString())
-    stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 2, 1);
-    console.log("startTime: " + stkDetails[0].toString() + ", amount: " + stkDetails[1].toString() )
   }); 
 
   describe('higher percentage for test coverage', function() {
@@ -290,14 +272,6 @@ contract("USDC JYearn", function(accounts) {
       await jYearnContract.setTrancheAFixedPercentage(1, web3.utils.toWei("0.03", "ether"))
 
       await jYearnContract.getTrancheACurrentRPS(1)
-
-      await jYearnContract.setTrAStakingDetails(1, user1, 1, 0, 1634150567)
-      await jYearnContract.getSingleTrancheUserStakeCounterTrA(user1, 1)
-      await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrA(user1, 1, 1)
-
-      await jYearnContract.setTrBStakingDetails(1, user1, 1, 0, 1634150567)
-      await jYearnContract.getSingleTrancheUserStakeCounterTrB(user1, 1)
-      await jYearnContract.getSingleTrancheUserSingleStakeDetailsTrB(user1, 1, 1)
 
       await jYearnContract.transferTokenToFeesCollector(USDC_ADDRESS, 0)
 
