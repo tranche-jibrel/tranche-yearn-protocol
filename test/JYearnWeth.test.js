@@ -139,9 +139,9 @@ contract("WETH JYearn", function(accounts) {
     console.log("rps tranche A: " + trParams[3].toString());
     console.log("price tranche A: " + fromWei(trParams[2].toString()));
     console.log("yvWETH price per full shares Normalized: " + fromWei(await jYearnContract.getYVaultNormPrice(0)))
-    trAddress = await jYearnContract.trancheAddresses(2);
-    expect(trAddress.buyerCoinAddress).to.be.equal(USDC_ADDRESS);
-    expect(trAddress.yTokenAddress).to.be.equal(yvUSDC_Address);
+    trAddress = await jYearnContract.trancheAddresses(0);
+    expect(trAddress.buyerCoinAddress).to.be.equal(WETH_ADDRESS);
+    expect(trAddress.yTokenAddress).to.be.equal(yvWETH_ADDRESS);
     console.log("user1 WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
 
     tx = await wethContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
