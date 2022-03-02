@@ -171,14 +171,14 @@ contract("WETH JYearn", function(accounts) {
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(0)));
     console.log("TrB total supply: " + fromWei(await wethTrBContract.totalSupply()));
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(0)));
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0)));
 
     tx = await jYearnContract.buyTrancheBToken(0, toWei(90), {from: user1});
 
     console.log("User1 New WETH balance: " + fromWei(await wethContract.methods.balanceOf(user1).call()) + " WETH");
     console.log("User1 trB tokens: " + fromWei(await wethTrBContract.balanceOf(user1)) + " byvWEB");
     console.log("JYearn WETH balance: " + fromWei(await jYearnContract.getTokenBalance(yvWETH_ADDRESS)) + " yvWETH");
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0)));
     trAddresses = await jYearnContract.trancheAddresses(0);
     trParams = await jYearnContract.trancheParameters(0);
     console.log("TrA price: " + fromWei(trParams[2].toString()));
@@ -247,7 +247,7 @@ contract("WETH JYearn", function(accounts) {
     console.log("User1 trB tokens: "+ fromWei(bal) + " byvWEB");
     console.log("JYearn yvWETH balance: "+ fromWei(await jYearnContract.getTokenBalance(yvWETH_ADDRESS)) + " yvWETH");
     tx = await wethTrBContract.approve(jYearnContract.address, bal, {from: user1});
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(0)));
     console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(0)));
 
     tx = await jYearnContract.redeemTrancheBToken(0, bal, {from: user1});

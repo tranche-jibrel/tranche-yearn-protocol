@@ -168,17 +168,17 @@ contract("USDC JYearn", function(accounts) {
     trAddr = await jYearnContract.trancheAddresses(2);
     buyAddr = trAddr.buyerCoinAddress;
     console.log("Tranche Buyer Coin address: " + buyAddr);
-    console.log("TrB value: " + fromWei(await jYearnContract.getTrBValue(2)));
+    console.log("TrB value: " + fromWei6Dec(await jYearnContract.getTrBValue(2)));
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)) + " ayUSDC");
     console.log("TrB total supply: " + fromWei(await usdcTrBContract.totalSupply()));
     console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)) + " USDC");
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2)));
     tx = await usdcContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
     tx = await jYearnContract.buyTrancheBToken(2, toWei6Dec(10), {from: user1});
     console.log("User1 New USDC balance: " + fromWei6Dec(await usdcContract.methods.balanceOf(user1).call()) + " USDC");
     console.log("User1 trB tokens: " + fromWei(await usdcTrBContract.balanceOf(user1)) + " byUSDC");
     console.log("JYearn USDC balance: " + fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2)));
     console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
     console.log("TrB value: " + fromWei6Dec(await jYearnContract.getTrBValue(2)));
@@ -200,7 +200,7 @@ contract("USDC JYearn", function(accounts) {
 
   it('migration from one vault to a token, back an forth', async function () {
     await jYearnContract.migrateYTranche(2, yUSDC_Address, false)
-    console.log("JYearn total Value in new token: " + fromWei(await jYearnContract.getTotalValue(2)));
+    console.log("JYearn total Value in new token: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
     console.log("JYearn TrA Value in new token: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
     console.log("JYearn TrB Value in new token: " + fromWei(await jYearnContract.getTrBValue(2)));
 
@@ -228,7 +228,7 @@ contract("USDC JYearn", function(accounts) {
     console.log("User1 trA tokens: "+ fromWei(bal) + " ayUSDC");
     console.log("User1 trA interest: "+ (newBal - oldBal) + " USDC");
     console.log("JYearn new yUSDC balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
-    console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(2)));
+    console.log("JYearn TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
     console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
 
     console.log("staker counter trA: " + (await jYearnContract.stakeCounterTrA(user1, 2)).toString())
@@ -252,7 +252,7 @@ contract("USDC JYearn", function(accounts) {
     console.log("User1 trB tokens: "+ fromWei(bal) + " byUSDC");
     console.log("JYearn yUSDC balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
     tx = await usdcTrBContract.approve(jYearnContract.address, bal, {from: user1});
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(2)));
     console.log("TrB value: " +  fromWei6Dec(await jYearnContract.getTrBValue(2)));
     tx = await jYearnContract.redeemTrancheBToken(2, bal, {from: user1});
     newBal = fromWei6Dec(await usdcContract.methods.balanceOf(user1).call());
@@ -261,9 +261,9 @@ contract("USDC JYearn", function(accounts) {
     console.log("User1 trB tokens: "+ fromWei(bal) + " byUSDC");
     console.log("User1 trB interest: "+ (newBal - oldBal) + " USDC");
     console.log("JYearn new yUSDC balance: "+ fromWei6Dec(await jYearnContract.getTokenBalance(yvUSDC_Address)) + " yUsdc");
-    console.log("TrA Value: " + fromWei(await jYearnContract.getTrAValue(2)));
-    console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(2)));
-    console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(2)));
+    console.log("TrA Value: " + fromWei6Dec(await jYearnContract.getTrAValue(2)));
+    console.log("TrB value: " +  fromWei6Dec(await jYearnContract.getTrBValue(2)));
+    console.log("JYearn total Value: " + fromWei6Dec(await jYearnContract.getTotalValue(2)));
 
     console.log("staker counter trB: " + (await jYearnContract.stakeCounterTrB(user1, 2)).toString())
     stkDetails = await jYearnContract.stakingDetailsTrancheB(user1, 2, 1);

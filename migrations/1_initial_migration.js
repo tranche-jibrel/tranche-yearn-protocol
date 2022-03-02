@@ -11,7 +11,6 @@ var JTrancheAToken = artifacts.require('JTrancheAToken');
 var JTrancheBToken = artifacts.require('JTrancheBToken');
 
 var myERC20 = artifacts.require("./mocks/myERC20.sol");
-var WETHGateway = artifacts.require('WETHGateway');
 
 var IncentivesController = artifacts.require('./IncentivesController');
 
@@ -47,9 +46,10 @@ module.exports = async (deployer, network, accounts) => {
     const JYInstance = await deployProxy(JYearn, [JATinstance.address, JFCinstance.address, JTDeployer.address], { from: factoryOwner });
     console.log('JYearn Deployed: ', JYInstance.address);
 
-    await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
+    await JTDeployer.setJYearnAddresses(JYInstance.address, JATinstance.address, { from: factoryOwner });
 
-    await JTDeployer.setJYearnAddress(JYInstance.address, { from: factoryOwner });
+    await JATinstance.addAdmin(JYInstance.address, { from: factoryOwner })
+    await JATinstance.addAdmin(JTDeployer.address, { from: factoryOwner })
 
     await JYInstance.addTrancheToProtocol(WETH_ADDRESS, yvWETH_Address, true, "jWEthTrancheAToken", "ayvWEA",
       "jWEthTrancheBToken", "byvWEB", web3.utils.toWei("0.04", "ether"), 18, { from: factoryOwner });
