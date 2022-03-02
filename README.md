@@ -74,8 +74,13 @@ All values will be sent to new vault and tokens inside contract will be switched
     </thead>
     <tbody>
         <tr>
+            <td>JAdminTools</td>
+            <td><code>57.89%</code></td>
+            <td>---</td>
+        </tr>
+        <tr>
             <td>JYearn</td>
-            <td><code>94.81%</code></td>
+            <td><code>94.52%</code></td>
             <td>---</td>
         </tr>
         <tr>
@@ -84,8 +89,8 @@ All values will be sent to new vault and tokens inside contract will be switched
             <td>---</td>
         </tr>
         <tr>
-            <td>JAdminTools</td>
-            <td><code>57.89%</code></td>
+            <td>JTrancheDeployer</td>
+            <td><code>76.92%</code></td>
             <td>---</td>
         </tr>
         <tr>
@@ -151,7 +156,7 @@ All values will be sent to new vault and tokens inside contract will be switched
         </tr>
         <tr>
             <td>JYearn</td>
-            <td><code>16.65</code></td>
+            <td><code>16.71</code></td>
             <td>Core contract protocol (implementation). It is responsible to make all actions to give the exact amount of tranche token to users, connecting with Yearn to have interest rates and other informations to give tokens the price they should have block by block. It also opens new tranches, and, via Tranche Deployer contract, it deploys new tranche tokens. Upgradeable.</td>
         </tr>
         <tr>

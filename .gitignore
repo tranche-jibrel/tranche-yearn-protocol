@@ -16,4 +16,4 @@ flatten/
 strategies/
 unknown*
 .coverage*
-
+.DS_Store

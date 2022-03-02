@@ -162,13 +162,13 @@ contract("DAI JYearn", function(accounts) {
     console.log("JYearn total Value: " + fromWei(await jYearnContract.getTotalValue(1)));
     console.log("TrB total supply: " + fromWei(await daiTrBContract.totalSupply()));
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1)));
     tx = await daiContract.methods.approve(jYearnContract.address, toWei(100)).send({from: user1});
     tx = await jYearnContract.buyTrancheBToken(1, toWei(10), {from: user1});
     console.log("User1 New DAI balance: " + fromWei(await daiContract.methods.balanceOf(user1).call()) + " DAI");
     console.log("User1 trB tokens: " + fromWei(await daiTrBContract.balanceOf(user1)) + " byDai");
     console.log("JYearn DAI balance: " + fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1)));
     trParams = await jYearnContract.trancheParameters(1);
     console.log("TrA price: " + fromWei(trParams[2].toString()));
     console.log("JYearn TrA Value: " + fromWei(await jYearnContract.getTrAValue(1)));
@@ -294,7 +294,7 @@ contract("DAI JYearn", function(accounts) {
     console.log("User1 trB tokens: "+ fromWei(bal) + " byDai");
     console.log("JYearn yDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     tx = await daiTrBContract.approve(jYearnContract.address, bal, {from: user1});
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1)));
     console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(1)));
 
     tx = await jYearnContract.redeemTrancheBToken(1, bal, {from: user1});
@@ -317,7 +317,7 @@ contract("DAI JYearn", function(accounts) {
     console.log("User2 trB tokens: "+ fromWei(bal) + " byDai");
     console.log("JYearn yDai balance: "+ fromWei(await jYearnContract.getTokenBalance(yDAI_Address)) + " yDai");
     tx = await daiTrBContract.approve(jYearnContract.address, bal, {from: user2});
-    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1, 0)));
+    console.log("TrB price: " + fromWei(await jYearnContract.getTrancheBExchangeRate(1)));
     console.log("TrB value: " +  fromWei(await jYearnContract.getTrBValue(1)));
 
     tx = await jYearnContract.redeemTrancheBToken(1, bal, {from: user2});
